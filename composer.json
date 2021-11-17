@@ -1,6 +1,6 @@
 {
     "name": "bornfight/maboo-maker-bundle",
-    "description": "Boilerplate code generator for layered architecture in projects, inspired by Maboo",
+    "description": "Boilerplate code generator for projects with layered architecture. Inspired by Maboo",
     "type": "symfony-bundle",
     "license": "MIT",
     "autoload": {
@@ -16,5 +16,8 @@
     ],
     "require": {
         "php": "^7.4"
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.36"
     }
 }
