@@ -1,0 +1,162 @@
+services:
+  _defaults:
+    public: false
+
+  bornfight_maboo_maker.module.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Module\Questionnaire
+    arguments:
+      - '@bornfight_maboo_maker.service.namespace_service'
+
+  bornfight_maboo_maker.entity.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Entity\Questionnaire
+    arguments:
+      - '@bornfight_maboo_maker.doctrine_helper'
+      - '@bornfight_maboo_maker.entity.entity_types'
+
+  bornfight_maboo_maker.entity.entity_types:
+    class: Bornfight\MabooMakerBundle\Maker\Entity\EntityTypes
+
+  bornfight_maboo_maker.domain_model.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\DomainModel\Questionnaire
+
+  bornfight_maboo_maker.write_models.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\WriteModels\Questionnaire
+
+  bornfight_maboo_maker.entity_mapper.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\EntityMapper\Questionnaire
+
+  bornfight_maboo_maker.repository.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Repository\Questionnaire
+
+  bornfight_maboo_maker.manager.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Manager\Questionnaire
+
+  bornfight_maboo_maker.validator.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Validator\Questionnaire
+
+  bornfight_maboo_maker.resolver.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Resolver\Questionnaire
+
+  bornfight_maboo_maker.mutation.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Mutation\Questionnaire
+
+  bornfight_maboo_maker.doctrine_helper:
+    class: Bornfight\MabooMakerBundle\Doctrine\DoctrineHelper
+    arguments:
+      - 'App\Shared\Infrastructure\Persistence\Doctrine\Entity'
+      - '@doctrine'
+
+  bornfight_maboo_maker.service.namespace_service:
+    class: Bornfight\MabooMakerBundle\Services\NamespaceService
+    arguments:
+      - '@bornfight_maboo_maker.doctrine_helper'
+      - 'Shared\Infrastructure\Persistence\Doctrine\Entity\'
+      - '_module_\Domain\Model\'
+      - '_module_\Domain\WriteModel\'
+      - 'Shared\Infrastructure\Persistence\Doctrine\Mapper\'
+      - '_module_\Domain\Repository\'
+      - '_module_\Infrastructure\Persistence\Repository\'
+      - '_module_\Application\Validator\'
+      - '_module_\Application\Specification\'
+      - '_module_\Infrastructure\Specification\'
+      - '_module_\Application\Manager\'
+      - '_module_\Infrastructure\GraphQL\Resolver\'
+      - '_module_\Infrastructure\GraphQL\Mutation\'
+      - 'config/graphql/types/Query.types.yaml'
+      - 'config/graphql/types/Mutation.types.yaml'
+      - 'src/_module_/Infrastructure/Resources/config/graphql/types/'
+      - 'src/_module_/Infrastructure/Resources/config/graphql/types/_model_/Input/'
+      - 'src/_module_/Infrastructure/Resources/config/graphql/types/_model_/Payload/'
+      - '@maker.file_manager'
+      - 'src'
+
+  bornfight_maboo_maker.service.entity_naming_service:
+    class: Bornfight\MabooMakerBundle\Services\EntityNamingService
+
+  bornfight_maboo_maker.service.interactor:
+    class: Bornfight\MabooMakerBundle\Services\Interactor
+    arguments:
+      - '@bornfight_maboo_maker.module.questionnaire'
+      - '@bornfight_maboo_maker.entity.questionnaire'
+      - '@bornfight_maboo_maker.domain_model.questionnaire'
+      - '@bornfight_maboo_maker.write_models.questionnaire'
+      - '@bornfight_maboo_maker.entity_mapper.questionnaire'
+      - '@bornfight_maboo_maker.repository.questionnaire'
+      - '@bornfight_maboo_maker.validator.questionnaire'
+      - '@bornfight_maboo_maker.manager.questionnaire'
+      - '@bornfight_maboo_maker.resolver.questionnaire'
+      - '@bornfight_maboo_maker.mutation.questionnaire'
+
+  bornfight_maboo_maker.service.class_manipulator_manager:
+    class: Bornfight\MabooMakerBundle\Services\ClassManipulator\ClassManipulatorManager
+    arguments:
+      - '@maker.file_manager'
+
+  bornfight_maboo_maker.service.doctrine.entity_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Doctrine\EntityClassGenerator
+    arguments:
+      - '@maker.generator'
+      - '@bornfight_maboo_maker.doctrine_helper'
+
+  bornfight_maboo_maker.service.domain.domain_model_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Domain\DomainModelClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.domain.write_models_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Domain\WriteModelsClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.doctrine.entity_mapper_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Doctrine\EntityMapperClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.domain.repository_interface_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Domain\RepositoryInterfaceGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.doctrine.repository_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Doctrine\RepositoryClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.application.manager_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Application\ManagerClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.application.validator_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Application\ValidatorClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.application.specification_interface_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Application\SpecificationInterfaceGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.doctrine.specification_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Doctrine\SpecificationClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.infrastructure.resolver_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Infrastructure\ResolverClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.infrastructure.mutation_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Infrastructure\MutationClassGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.service.infrastructure.graph_ql_schema_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Infrastructure\GraphQLSchemaGenerator
+    arguments:
+      - '@maker.generator'
+
+  bornfight_maboo_maker.scaffold.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Scaffold\Questionnaire

@@ -1,0 +1,126 @@
+services:
+  _defaults:
+    public: false
+
+  bornfight_maboo_maker.maker.make_module:
+    class: Bornfight\MabooMakerBundle\Maker\MakeModule
+    tags: [ 'maker.command' ]
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@filesystem'
+      - 'src/'
+
+  bornfight_maboo_maker.maker.make_entity:
+    class: Bornfight\MabooMakerBundle\Maker\MakeEntity
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.entity.questionnaire'
+      - '@bornfight_maboo_maker.doctrine_helper'
+      - '@bornfight_maboo_maker.service.doctrine.entity_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+      - '@bornfight_maboo_maker.entity.entity_types'
+
+  bornfight_maboo_maker.maker.make_domain_model:
+    class: Bornfight\MabooMakerBundle\Maker\MakeDomainModel
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.domain.domain_model_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+
+  bornfight_maboo_maker.maker.make_write_models:
+    class: Bornfight\MabooMakerBundle\Maker\MakeWriteModels
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.domain.write_models_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+
+  bornfight_maboo_maker.maker.make_entity_mapper:
+    class: Bornfight\MabooMakerBundle\Maker\MakeEntityMapper
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.doctrine.entity_mapper_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+
+  bornfight_maboo_maker.maker.make_repository:
+    class: Bornfight\MabooMakerBundle\Maker\MakeRepository
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.domain.repository_interface_generator'
+      - '@bornfight_maboo_maker.service.doctrine.repository_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+
+  bornfight_maboo_maker.maker.make_validator:
+    class: Bornfight\MabooMakerBundle\Maker\MakeValidator
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.application.validator_class_generator'
+      - '@bornfight_maboo_maker.service.application.specification_interface_generator'
+      - '@bornfight_maboo_maker.service.doctrine.specification_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+      -
+  bornfight_maboo_maker.maker.make_manager:
+    class: Bornfight\MabooMakerBundle\Maker\MakeManager
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.application.manager_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+
+  bornfight_maboo_maker.maker.make_resolver:
+    class: Bornfight\MabooMakerBundle\Maker\MakeResolver
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.infrastructure.resolver_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.entity_naming_service'
+
+  bornfight_maboo_maker.maker.make_mutation:
+    class: Bornfight\MabooMakerBundle\Maker\MakeMutation
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.infrastructure.mutation_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+
+  bornfight_maboo_maker.maker.make_graph_ql_schema:
+    class: Bornfight\MabooMakerBundle\Maker\MakeGraphQLSchema
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.infrastructure.graph_ql_schema_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+      - '@bornfight_maboo_maker.service.entity_naming_service'
+
+  bornfight_maboo_maker.maker.make_scaffold:
+    class: Bornfight\MabooMakerBundle\Maker\MakeScaffold
+    tags: [ 'maker.command' ]
+    arguments:
+      - '@bornfight_maboo_maker.scaffold.questionnaire'
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.namespace_service'
+
