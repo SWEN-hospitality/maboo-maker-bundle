@@ -1,0 +1,20 @@
+{
+    "name": "bornfight/maboo-maker-bundle",
+    "description": "Boilerplate code generator for layered architecture in projects, inspired by Maboo",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Bornfight\\MabooMakerBundle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "gh0c",
+            "email": "goran.hrzenjak@bornfight.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    }
+}
