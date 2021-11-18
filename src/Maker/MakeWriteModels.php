@@ -63,7 +63,7 @@ class MakeWriteModels extends PlainMaker
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $entity = $input->getArgument($this->interactor->getEntityArg());
-        $model = $input->getArgument($this->interactor->getDomainModelArg());
+        $input->getArgument($this->interactor->getDomainModelArg());
         $createWriteModel = $input->getArgument($this->interactor->getCreateWriteModelArg());
         $updateWriteModel = $input->getArgument($this->interactor->getUpdateWriteModelArg());
 
