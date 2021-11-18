@@ -223,4 +223,16 @@ abstract class PlainMaker extends AbstractMaker
 
         return $this;
     }
+
+    protected function addFixturesArgumentToCommand(Command $command, InputConfiguration $inputConfig): self
+    {
+        $command->addArgument(
+            $this->interactor->getFixturesArg(),
+            InputArgument::OPTIONAL,
+            'Fixture class name'
+        );
+        $inputConfig->setArgumentAsNonInteractive($this->interactor->getFixturesArg());
+
+        return $this;
+    }
 }
