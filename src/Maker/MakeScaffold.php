@@ -60,7 +60,8 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             ->addValidatorArgumentToCommand($command, $inputConfig)
             ->addManagerArgumentToCommand($command, $inputConfig)
             ->addResolverArgumentToCommand($command, $inputConfig)
-            ->addMutationArgumentToCommand($command, $inputConfig);
+            ->addMutationArgumentToCommand($command, $inputConfig)
+            ->addFixturesArgumentToCommand($command, $inputConfig);
     }
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
@@ -117,6 +118,11 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         if (true === $this->makerSelection->shouldCreateMutation()) {
             $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
             $this->interactor->getMutation($input, $io, $command, $domainModel);
+        }
+
+        if (true === $this->makerSelection->shouldCreateFixtures()) {
+            $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
+            $this->interactor->getFixtures($input, $io, $command, $domainModel);
         }
     }
 
@@ -179,6 +185,12 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             $makeMutationCommand = $this->application->find('make:maboo-mutation');
             $makeMutationInput = new ArrayInput($this->getMutationCommandArguments($input));
             $makeMutationCommand->run($makeMutationInput, $io->getOutput());
+        }
+
+        if ($this->makerSelection->shouldCreateMutation()) {
+            $makeFixturesCommand = $this->application->find('make:maboo-mutation');
+            $makeFixturesInput = new ArrayInput($this->getFixturesCommandArguments($input));
+            $makeFixturesCommand->run($makeFixturesInput, $io->getOutput());
         }
 
         $this->echoSuccessMessages([
@@ -305,6 +317,17 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
             $this->interactor->getManagerArg() => $input->getArgument($this->interactor->getManagerArg()),
             $this->interactor->getMutationArg() => $input->getArgument($this->interactor->getMutationArg()),
+        ];
+    }
+
+    private function getFixturesCommandArguments(InputInterface $input): array
+    {
+        return [
+            'command' => 'make:maboo-fixtures',
+            $this->interactor->getModuleArg() => $input->getArgument($this->interactor->getModuleArg()),
+            $this->interactor->getEntityArg() => $input->getArgument($this->interactor->getEntityArg()),
+            $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
+            $this->interactor->getFixturesArg() => $input->getArgument($this->interactor->getFixturesArg()),
         ];
     }
 }
