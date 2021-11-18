@@ -57,9 +57,7 @@ class MakeDomainModel extends PlainMaker
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getModule($input, $io, $command);
-        $entity = $this->interactor->getEntity($input, $io, $command);
-        $this->interactor->getDomainModel($input, $io, $command, $entity);
+        $this->interactor->collectDomainModelArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)

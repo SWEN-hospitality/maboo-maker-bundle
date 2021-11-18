@@ -77,7 +77,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         $entity = $this->interactor->getEntity($input, $io, $command);
 
         if (true === $this->makerSelection->shouldCreateDomainModel()) {
-            $this->interactor->getDomainModel($input, $io, $command, $entity);
+            $this->interactor->collectDomainModelArguments($input, $io, $command);
         }
 
         if (true === $this->makerSelection->shouldCreateMapper()) {
