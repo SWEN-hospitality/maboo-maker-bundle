@@ -65,12 +65,7 @@ class MakeValidator extends PlainMaker
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getModule($input, $io, $command);
-        $domainModel = $this->interactor->getDomainModel($input, $io, $command, null);
-        $this->interactor->getRepositoryInterface($input, $io, $command, $domainModel);
-        $specificationInterface = $this->interactor->getSpecificationInterface($input, $io, $command, $domainModel);
-        $this->interactor->getSpecificationClass($input, $io, $command, $specificationInterface);
-        $this->interactor->getValidator($input, $io, $command, $domainModel);
+        $this->interactor->collectValidatorArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)

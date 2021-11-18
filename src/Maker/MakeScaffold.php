@@ -97,11 +97,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
 
         if (true === $this->makerSelection->shouldCreateValidator()) {
-            $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
-            $this->interactor->getRepositoryInterface($input, $io, $command, $domainModel);
-            $specificationInterface = $this->interactor->getSpecificationInterface($input, $io, $command, $domainModel);
-            $this->interactor->getSpecificationClass($input, $io, $command, $specificationInterface);
-            $this->interactor->getValidator($input, $io, $command, $domainModel);
+            $this->interactor->collectValidatorArguments($input, $io, $command);
         }
 
         if (true === $this->makerSelection->shouldCreateManager()) {
