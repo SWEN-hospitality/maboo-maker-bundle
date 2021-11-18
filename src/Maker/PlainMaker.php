@@ -35,7 +35,7 @@ abstract class PlainMaker extends AbstractMaker
             ? array_values($feedbackMessages)
             : [$feedbackMessages];
 
-        $io->block($messages, 'Success! ', 'fg=black;bg=green', ' ', true);
+        $io->block($messages, 'Success!', 'fg=black;bg=green', ' ', true);
     }
     /**
      * @param array|string $feedbackMessages
@@ -46,7 +46,7 @@ abstract class PlainMaker extends AbstractMaker
             ? array_values($feedbackMessages)
             : [$feedbackMessages];
 
-        $io->block($messages, 'Info ', 'fg=white;bg=blue', ' ', true);
+        $io->block($messages, 'Info', 'fg=white;bg=blue', ' ', true);
     }
 
     protected function buildCommand(Command $command): self
