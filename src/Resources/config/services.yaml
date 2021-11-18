@@ -90,6 +90,7 @@ services:
       - '@bornfight_maboo_maker.manager.questionnaire'
       - '@bornfight_maboo_maker.resolver.questionnaire'
       - '@bornfight_maboo_maker.mutation.questionnaire'
+      - '@bornfight_maboo_maker.fixtures.questionnaire'
 
   bornfight_maboo_maker.service.class_manipulator_manager:
     class: Bornfight\MabooMakerBundle\Services\ClassManipulator\ClassManipulatorManager

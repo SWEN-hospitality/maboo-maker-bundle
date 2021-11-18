@@ -7,6 +7,7 @@ namespace Bornfight\MabooMakerBundle\Services;
 use Bornfight\MabooMakerBundle\Maker\DomainModel\Questionnaire as DomainModelQuestionnaire;
 use Bornfight\MabooMakerBundle\Maker\Entity\Questionnaire as EntityQuestionnaire;
 use Bornfight\MabooMakerBundle\Maker\EntityMapper\Questionnaire as EntityMapperQuestionnaire;
+use Bornfight\MabooMakerBundle\Maker\Fixtures\Questionnaire as FixturesQuestionnaire;
 use Bornfight\MabooMakerBundle\Maker\Manager\Questionnaire as ManagerQuestionnaire;
 use Bornfight\MabooMakerBundle\Maker\Module\Questionnaire as ModuleQuestionnaire;
 use Bornfight\MabooMakerBundle\Maker\Mutation\Questionnaire as MutationQuestionnaire;
@@ -34,6 +35,7 @@ class Interactor
     public const MANAGER_ARG = 'manager';
     public const RESOLVER_ARG = 'resolver';
     public const MUTATION_ARG = 'mutation';
+    public const FIXTURES_ARG = 'fixtures';
 
     private ModuleQuestionnaire $moduleQuestionnaire;
     private EntityQuestionnaire $entityQuestionnaire;
@@ -45,6 +47,7 @@ class Interactor
     private ManagerQuestionnaire $managerQuestionnaire;
     private ResolverQuestionnaire $resolverQuestionnaire;
     private MutationQuestionnaire $mutationQuestionnaire;
+    private FixturesQuestionnaire $fixturesQuestionnaire;
 
     public function __construct(
         ModuleQuestionnaire $moduleQuestionnaire,
@@ -56,7 +59,8 @@ class Interactor
         ValidatorQuestionnaire $validatorQuestionnaire,
         ManagerQuestionnaire $managerQuestionnaire,
         ResolverQuestionnaire $resolverQuestionnaire,
-        MutationQuestionnaire $mutationQuestionnaire
+        MutationQuestionnaire $mutationQuestionnaire,
+        FixturesQuestionnaire $fixturesQuestionnaire
     ) {
         $this->moduleQuestionnaire = $moduleQuestionnaire;
         $this->entityQuestionnaire = $entityQuestionnaire;
@@ -68,6 +72,7 @@ class Interactor
         $this->managerQuestionnaire = $managerQuestionnaire;
         $this->resolverQuestionnaire = $resolverQuestionnaire;
         $this->mutationQuestionnaire = $mutationQuestionnaire;
+        $this->fixturesQuestionnaire = $fixturesQuestionnaire;
     }
 
     public function getModuleArg(): string
@@ -450,5 +455,34 @@ class Interactor
         $input->setArgument($this->getMutationArg(), $mutation);
 
         return $mutation;
+    }
+
+    public function getFixturesArg(): string
+    {
+        return self::FIXTURES_ARG;
+    }
+
+    public function getFixtures(
+        InputInterface $input,
+        ConsoleStyle $io,
+        Command $command,
+        string $domainModel
+    ): string {
+        $fixtures = $input->getArgument($this->getFixturesArg());
+
+        if (true === is_string($fixtures) && '' !== $fixtures) {
+            return $fixtures;
+        }
+
+        $argument = $command->getDefinition()->getArgument($this->getFixturesArg());
+        $fixtures = $this->fixturesQuestionnaire->getFixturesClassName(
+            $io,
+            $argument->getDescription(),
+            $domainModel
+        );
+
+        $input->setArgument($this->getFixturesArg(), $fixtures);
+
+        return $fixtures;
     }
 }
