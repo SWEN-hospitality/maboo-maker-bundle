@@ -263,6 +263,20 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         ];
     }
 
+    private function getValidatorCommandArguments(InputInterface $input): array
+    {
+        return [
+            'command' => 'make:maboo-validator',
+            $this->interactor->getModuleArg() => $input->getArgument($this->interactor->getModuleArg()),
+            $this->interactor->getEntityArg() => $input->getArgument($this->interactor->getEntityArg()),
+            $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
+            $this->interactor->getRepositoryInterfaceArg() => $input->getArgument($this->interactor->getRepositoryInterfaceArg()),
+            $this->interactor->getSpecificationInterfaceArg() => $input->getArgument($this->interactor->getSpecificationInterfaceArg()),
+            $this->interactor->getSpecificationClassArg() => $input->getArgument($this->interactor->getSpecificationClassArg()),
+            $this->interactor->getValidatorArg() => $input->getArgument($this->interactor->getValidatorArg()),
+        ];
+    }
+
     private function getManagerCommandArguments(InputInterface $input): array
     {
         return [
@@ -274,19 +288,6 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             $this->interactor->getRepositoryInterfaceArg() => $input->getArgument($this->interactor->getRepositoryInterfaceArg()),
             $this->interactor->getValidatorArg() => $input->getArgument($this->interactor->getValidatorArg()),
             $this->interactor->getManagerArg() => $input->getArgument($this->interactor->getManagerArg()),
-        ];
-    }
-
-    private function getValidatorCommandArguments(InputInterface $input): array
-    {
-        return [
-            'command' => 'make:maboo-validator',
-            $this->interactor->getModuleArg() => $input->getArgument($this->interactor->getModuleArg()),
-            $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
-            $this->interactor->getRepositoryInterfaceArg() => $input->getArgument($this->interactor->getRepositoryInterfaceArg()),
-            $this->interactor->getSpecificationInterfaceArg() => $input->getArgument($this->interactor->getSpecificationInterfaceArg()),
-            $this->interactor->getSpecificationClassArg() => $input->getArgument($this->interactor->getSpecificationClassArg()),
-            $this->interactor->getValidatorArg() => $input->getArgument($this->interactor->getValidatorArg()),
         ];
     }
 
