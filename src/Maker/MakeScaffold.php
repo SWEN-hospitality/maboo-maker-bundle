@@ -111,8 +111,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
 
         if (true === $this->makerSelection->shouldCreateResolver()) {
-            $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
-            $this->interactor->getResolver($input, $io, $command, $domainModel);
+            $this->interactor->collectResolverArguments($input, $io, $command);
         }
 
         if (true === $this->makerSelection->shouldCreateMutation()) {
