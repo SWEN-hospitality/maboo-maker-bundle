@@ -7,10 +7,9 @@ namespace <?= $namespace ?>;
 use <?= $entity_full_class_name ?> as <?= $entity_alias ?>;
 use App\Shared\Application\Factory\UuidGeneratorInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class <?= $class_name ?> extends Fixture implements DependentFixtureInterface
+class <?= $class_name ?> extends Fixture
 {
     private UuidGeneratorInterface $uuidGenerator;
 
@@ -50,13 +49,5 @@ class <?= $class_name ?> extends Fixture implements DependentFixtureInterface
 <?php endforeach; ?>
             ],
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDependencies(): array
-    {
-        return [];
     }
 }
