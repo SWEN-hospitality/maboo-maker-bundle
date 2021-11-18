@@ -202,7 +202,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         $this->echoInfoMessages([
             'Generate and run migrations if you\'ve made any changes to the entity.',
             'Add realistic fixtures data and apply them.',
-            'Generate GraphQL schema by running <info>bin/console make:maboo-gql</info> if necessary.',
+            'Generate GraphQL schema by running $ bin/console make:maboo-gql if necessary.',
             'Write your own unit and functional tests.',
         ], $io);
     }
