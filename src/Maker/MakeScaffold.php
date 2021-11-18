@@ -297,6 +297,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         return [
             'command' => 'make:maboo-resolver',
             $this->interactor->getModuleArg() => $input->getArgument($this->interactor->getModuleArg()),
+            $this->interactor->getEntityArg() => $input->getArgument($this->interactor->getEntityArg()),
             $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
             $this->interactor->getRepositoryInterfaceArg() => $input->getArgument($this->interactor->getRepositoryInterfaceArg()),
             $this->interactor->getResolverArg() => $input->getArgument($this->interactor->getResolverArg()),
@@ -308,6 +309,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         return [
             'command' => 'make:maboo-mutation',
             $this->interactor->getModuleArg() => $input->getArgument($this->interactor->getModuleArg()),
+            $this->interactor->getEntityArg() => $input->getArgument($this->interactor->getEntityArg()),
             $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
             $this->interactor->getManagerArg() => $input->getArgument($this->interactor->getManagerArg()),
             $this->interactor->getMutationArg() => $input->getArgument($this->interactor->getMutationArg()),
