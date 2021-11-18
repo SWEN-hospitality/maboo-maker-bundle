@@ -59,8 +59,7 @@ class MakeGraphQLSchema extends PlainMaker
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getModule($input, $io, $command);
-        $this->interactor->getDomainModel($input, $io, $command, null);
+        $this->interactor->collectGraphQLSchemaArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)

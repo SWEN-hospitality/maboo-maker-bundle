@@ -170,6 +170,13 @@ class Interactor
         $this->getFixtures($input, $io, $command, $domainModel);
     }
 
+    public function collectGraphQLSchemaArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
+    {
+        $this->getModule($input, $io, $command);
+        $entity = $this->getEntity($input, $io, $command);
+        $this->getDomainModel($input, $io, $command, $entity);
+    }
+
     public function getModuleArg(): string
     {
         return self::MODULE_ARG;
