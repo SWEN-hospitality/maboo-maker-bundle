@@ -62,6 +62,7 @@ services:
       - '_module_\Application\Manager\'
       - '_module_\Infrastructure\GraphQL\Resolver\'
       - '_module_\Infrastructure\GraphQL\Mutation\'
+      - '_module_\Infrastructure\Persistence\DataFixtures\'
       - 'config/graphql/types/Query.types.yaml'
       - 'config/graphql/types/Mutation.types.yaml'
       - 'src/_module_/Infrastructure/Resources/config/graphql/types/'

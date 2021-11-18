@@ -23,6 +23,7 @@ class NamespaceService
     private string $managerNamespaceTemplate;
     private string $resolverNamespaceTemplate;
     private string $mutationNamespaceTemplate;
+    private string $fixturesNamespaceTemplate;
     private string $gqlQueryTypesPath;
     private string $gqlMutationTypesPath;
     private string $gqlModelTypePathTemplate;
@@ -45,6 +46,7 @@ class NamespaceService
         string $managerNamespaceTemplate,
         string $resolverNamespaceTemplate,
         string $mutationNamespaceTemplate,
+        string $fixturesNamespaceTemplate,
         string $gqlQueryTypesPath,
         string $gqlMutationTypesPath,
         string $gqlModelTypePathTemplate,
@@ -66,6 +68,7 @@ class NamespaceService
         $this->managerNamespaceTemplate = $managerNamespaceTemplate;
         $this->resolverNamespaceTemplate = $resolverNamespaceTemplate;
         $this->mutationNamespaceTemplate = $mutationNamespaceTemplate;
+        $this->fixturesNamespaceTemplate = $fixturesNamespaceTemplate;
         $this->gqlQueryTypesPath = $gqlQueryTypesPath;
         $this->gqlMutationTypesPath = $gqlMutationTypesPath;
         $this->gqlModelTypePathTemplate = $gqlModelTypePathTemplate;
@@ -138,6 +141,11 @@ class NamespaceService
     public function getMutationNamespace(string $module): string
     {
         return str_replace('_module_', $module, $this->mutationNamespaceTemplate);
+    }
+
+    public function getFixturesNamespace(string $module): string
+    {
+        return str_replace('_module_', $module, $this->fixturesNamespaceTemplate);
     }
 
     public function getGraphQLQueryTypesPath(): string
