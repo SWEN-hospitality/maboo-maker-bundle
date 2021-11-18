@@ -61,13 +61,7 @@ class MakeManager extends PlainMaker
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getModule($input, $io, $command);
-        $domainModel = $this->interactor->getDomainModel($input, $io, $command, null);
-        $this->interactor->getCreateWriteModel($input, $io, $command, $domainModel);
-        $this->interactor->getUpdateWriteModel($input, $io, $command, $domainModel);
-        $this->interactor->getRepositoryInterface($input, $io, $command, $domainModel);
-        $this->interactor->getValidator($input, $io, $command, $domainModel);
-        $this->interactor->getManager($input, $io, $command, $domainModel);
+        $this->interactor->collectManagerArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
