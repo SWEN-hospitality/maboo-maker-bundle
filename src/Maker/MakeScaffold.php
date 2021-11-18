@@ -187,8 +187,8 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             $makeMutationCommand->run($makeMutationInput, $io->getOutput());
         }
 
-        if ($this->makerSelection->shouldCreateMutation()) {
-            $makeFixturesCommand = $this->application->find('make:maboo-mutation');
+        if ($this->makerSelection->shouldCreateFixtures()) {
+            $makeFixturesCommand = $this->application->find('make:maboo-fixtures');
             $makeFixturesInput = new ArrayInput($this->getFixturesCommandArguments($input));
             $makeFixturesCommand->run($makeFixturesInput, $io->getOutput());
         }
@@ -199,7 +199,12 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             'It\'s probably a good idea to commit generated code and isolate any changes to it in separate commits.',
         ], $io);
 
-        $this->echoInfoMessages('Generate and run migrations if you\'ve made any changes to the entity', $io);
+        $this->echoInfoMessages([
+            'Generate and run migrations if you\'ve made any changes to the entity.',
+            'Add realistic fixtures data and apply them.',
+            'Generate GraphQL schema by running <info>bin/console make:maboo-gql</info> if necessary.',
+            'Write your own unit and functional tests.',
+        ], $io);
     }
 
     public function setApplication(Application $application)
