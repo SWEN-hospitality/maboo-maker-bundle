@@ -75,6 +75,18 @@ class Interactor
         $this->fixturesQuestionnaire = $fixturesQuestionnaire;
     }
 
+    public function collectRepositoryArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
+    {
+        $this->getModule($input, $io, $command);
+        $entity = $this->getEntity($input, $io, $command);
+        $domainModel = $this->getDomainModel($input, $io, $command, $entity);
+        $this->getCreateWriteModel($input, $io, $command, $domainModel);
+        $this->getUpdateWriteModel($input, $io, $command, $domainModel);
+        $this->getEntityMapper($input, $io, $command, $domainModel);
+        $repositoryInterface = $this->getRepositoryInterface($input, $io, $command, $domainModel);
+        $this->getRepositoryClass($input, $io, $command, $repositoryInterface);
+    }
+
     public function collectValidatorArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->getModule($input, $io, $command);
