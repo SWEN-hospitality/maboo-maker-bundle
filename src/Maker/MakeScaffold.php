@@ -116,8 +116,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
 
         if (true === $this->makerSelection->shouldCreateMutation()) {
-            $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
-            $this->interactor->getMutation($input, $io, $command, $domainModel);
+            $this->interactor->collectMutationArguments($input, $io, $command);
         }
 
         if (true === $this->makerSelection->shouldCreateFixtures()) {
