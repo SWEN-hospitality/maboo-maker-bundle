@@ -105,6 +105,16 @@ services:
       - '@bornfight_maboo_maker.service.infrastructure.mutation_class_generator'
       - '@bornfight_maboo_maker.service.namespace_service'
 
+  bornfight_maboo_maker.maker.make_fixtures:
+    class: Bornfight\MabooMakerBundle\Maker\MakeFixtures
+    tags: [ 'maker.command' ]
+    # manually wire all arguments
+    arguments:
+      - '@bornfight_maboo_maker.service.interactor'
+      - '@bornfight_maboo_maker.service.infrastructure.fixtures_class_generator'
+      - '@bornfight_maboo_maker.service.namespace_service'
+      - '@bornfight_maboo_maker.service.class_manipulator_manager'
+
   bornfight_maboo_maker.maker.make_graph_ql_schema:
     class: Bornfight\MabooMakerBundle\Maker\MakeGraphQLSchema
     tags: [ 'maker.command' ]

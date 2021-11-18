@@ -21,7 +21,7 @@ class FixturesClassGenerator
     /**
      * @param EntityField[] $fields
      */
-    public function generateMutationClass(
+    public function generateFixturesClass(
         ClassNameDetails $fixturesClassDetails,
         ClassNameDetails $entityClassDetails,
         ClassNameDetails $domainModelClassDetails,
