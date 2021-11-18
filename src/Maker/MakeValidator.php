@@ -73,7 +73,6 @@ class MakeValidator extends PlainMaker
         $module = $input->getArgument($this->interactor->getModuleArg());
         $model = $input->getArgument($this->interactor->getDomainModelArg());
         $repository = $input->getArgument($this->interactor->getRepositoryInterfaceArg());
-
         $specificationInterface = $input->getArgument($this->interactor->getSpecificationInterfaceArg());
         $specificationClass = $input->getArgument($this->interactor->getSpecificationClassArg());
         $validator = $input->getArgument($this->interactor->getValidatorArg());

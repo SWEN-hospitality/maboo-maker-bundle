@@ -282,6 +282,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         return [
             'command' => 'make:maboo-manager',
             $this->interactor->getModuleArg() => $input->getArgument($this->interactor->getModuleArg()),
+            $this->interactor->getEntityArg() => $input->getArgument($this->interactor->getEntityArg()),
             $this->interactor->getDomainModelArg() => $input->getArgument($this->interactor->getDomainModelArg()),
             $this->interactor->getCreateWriteModelArg() => $input->getArgument($this->interactor->getCreateWriteModelArg()),
             $this->interactor->getUpdateWriteModelArg() => $input->getArgument($this->interactor->getUpdateWriteModelArg()),
