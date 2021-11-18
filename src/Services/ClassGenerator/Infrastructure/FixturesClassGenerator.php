@@ -40,19 +40,19 @@ class FixturesClassGenerator
 
             switch (true) {
                 case 'int' === $field->typeHint:
-                    $fieldFixtureValues[] = 10;
+                    $fieldFixtureValues[] = '10';
                     break;
                 case 'string' === $field->typeHint:
-                    $fieldFixtureValues[] = 'example';
+                    $fieldFixtureValues[] = '\'example\'';
                     break;
                 case 'float' === $field->typeHint:
-                    $fieldFixtureValues[] = 20.00;
+                    $fieldFixtureValues[] = '20.50';
                     break;
                 case 'bool' === $field->typeHint:
-                    $fieldFixtureValues[] = true;
+                    $fieldFixtureValues[] = 'true';
                     break;
                 default:
-                    $fieldFixtureValues[] = 'Undefined';
+                    $fieldFixtureValues[] = '\'Undefined\'';
             }
         }
 

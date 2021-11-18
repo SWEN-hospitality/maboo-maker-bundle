@@ -49,7 +49,7 @@ class <?= $class_name ?> extends Fixture implements DependentFixtureInterface
                 '<?= $field ?>' => <?= $field_fixture_values[$idx] ?>,
 <?php endforeach; ?>
             ],
-        ]
+        ];
     }
 
     /**
