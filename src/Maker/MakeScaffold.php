@@ -121,8 +121,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
 
         if (true === $this->makerSelection->shouldCreateFixtures()) {
-            $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
-            $this->interactor->getFixtures($input, $io, $command, $domainModel);
+            $this->interactor->collectFixturesArguments($input, $io, $command);
         }
     }
 
