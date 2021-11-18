@@ -93,7 +93,7 @@ class MakeResolver extends PlainMaker
         $entityVarPlural = $this->entityNaming->getPluralName($domainModel);
 
         if (false === $resolverExists) {
-            $resolverClass = $this->resolverClassGenerator->generateResolverClass(
+            $this->resolverClassGenerator->generateResolverClass(
                 $resolverDetails,
                 $repositoryInterfaceDetails,
                 $domainModelClassDetails,
@@ -102,11 +102,8 @@ class MakeResolver extends PlainMaker
             );
 
             $generator->writeChanges();
-        }
 
-        $feedbackMessages = [
-            'Success! Resolver generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+            $this->echoSuccessMessages('Resolver generated!', $io);
+        }
     }
 }

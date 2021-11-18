@@ -159,10 +159,7 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
             }
         }
 
-        $feedbackMessages = [
-            'Success! Entity generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+        $this->echoSuccessMessages('Entity generated!', $io);
 
         $io->text([
             'Next: When you\'re ready, create a migration with <info>php bin/console make:migration</info>',

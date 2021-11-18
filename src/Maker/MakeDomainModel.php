@@ -110,11 +110,8 @@ class MakeDomainModel extends PlainMaker
             foreach ($fileManagerOperations as $path => $manipulatorOrMessage) {
                 $this->manipulatorManager->dumpFile($path, $manipulatorOrMessage->getSourceCode());
             }
-        }
 
-        $feedbackMessages = [
-            'Success! Domain model generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+            $this->echoSuccessMessages('Domain model generated!', $io);
+        }
     }
 }

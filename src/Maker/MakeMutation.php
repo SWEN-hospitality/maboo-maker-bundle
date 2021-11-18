@@ -91,11 +91,8 @@ class MakeMutation extends PlainMaker
             );
 
             $generator->writeChanges();
-        }
 
-        $feedbackMessages = [
-            'Success! Mutation class generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+            $this->echoSuccessMessages('Mutation class generated!', $io);
+        }
     }
 }

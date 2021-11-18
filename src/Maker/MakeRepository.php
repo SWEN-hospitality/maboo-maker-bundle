@@ -124,7 +124,7 @@ class MakeRepository extends PlainMaker
         );
 
         if (false === $repositoryInterfaceExists) {
-            $repositoryInterfacePath = $this->repositoryInterfaceGenerator->generateRepositoryInterface(
+            $this->repositoryInterfaceGenerator->generateRepositoryInterface(
                 $repositoryInterfaceDetails,
                 $domainModelClassDetails,
                 $createWriteModelClassDetails,
@@ -137,7 +137,7 @@ class MakeRepository extends PlainMaker
         $currentEntityFields = $this->manipulatorManager->getEntityFields($entityClassDetails->getFullName());
 
         if (false === $repositoryClassExists) {
-            $repositoryClass = $this->repositoryClassGenerator->generateRepositoryClass(
+            $this->repositoryClassGenerator->generateRepositoryClass(
                 $repositoryClassDetails,
                 $repositoryInterfaceDetails,
                 $domainModelClassDetails,
@@ -151,10 +151,7 @@ class MakeRepository extends PlainMaker
             $generator->writeChanges();
         }
 
-        $feedbackMessages = [
-            'Success! Repository interface and class generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+        $this->echoSuccessMessages('Repository interface and class generated!', $io);
     }
 
 }

@@ -62,5 +62,8 @@ class MakeModule extends PlainMaker
 
         $this->filesystem->mkdir(($modulePath));
         $io->comment('<fg=blue>Directory ' . $modulePath . ' created!</>');
+
+        $this->echoSuccessMessages('Module folder generated!', $io);
+
     }
 }

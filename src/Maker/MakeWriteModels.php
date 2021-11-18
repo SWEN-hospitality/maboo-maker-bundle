@@ -133,9 +133,6 @@ class MakeWriteModels extends PlainMaker
             }
         }
 
-        $feedbackMessages = [
-            'Success! Write models generated and updated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+        $this->echoSuccessMessages('Write models generated and updated!', $io);
     }
 }

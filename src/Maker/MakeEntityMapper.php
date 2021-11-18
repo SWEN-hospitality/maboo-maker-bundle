@@ -95,7 +95,7 @@ class MakeEntityMapper extends PlainMaker
         $currentEntityFields = $this->manipulatorManager->getEntityFields($entityClassDetails->getFullName());
 
         if (false === $mapperClassExists) {
-            $entityPath = $this->entityMapperClassGenerator->generateEntityMapperClass(
+            $this->entityMapperClassGenerator->generateEntityMapperClass(
                 $entityMapperClassDetails,
                 $entityClassDetails,
                 $domainModelClassDetails,
@@ -103,12 +103,9 @@ class MakeEntityMapper extends PlainMaker
             );
 
             $generator->writeChanges();
-        }
 
-        $feedbackMessages = [
-            'Success! Entity mapper generated and updated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+            $this->echoSuccessMessages('Entity mapper generated and updated!', $io);
+        }
     }
 
 }

@@ -144,12 +144,9 @@ class MakeValidator extends PlainMaker
             );
 
             $generator->writeChanges();
-        }
 
-        $feedbackMessages = [
-            'Success! Validator generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+            $this->echoSuccessMessages('Validator generated!', $io);
+        }
     }
 
 }

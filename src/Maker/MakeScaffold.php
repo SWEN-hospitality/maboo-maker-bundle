@@ -181,17 +181,13 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             $makeMutationCommand->run($makeMutationInput, $io->getOutput());
         }
 
-        $feedbackMessages = [
+        $this->echoSuccessMessages([
             'Code generation done!',
             'Review it; this is YOUR code, do not take for granted all generated code is exactly as you want it!',
             'It\'s probably a good idea to commit generated code and isolate any changes to it in separate commits.',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+        ], $io);
 
-        $feedbackMessages = [
-            'Generate and run migrations if you\'ve made any changes to the entity',
-        ];
-        $io->block($feedbackMessages, 'TODO', 'fg=white;bg=blue', ' ', true);
+        $this->echoInfoMessages('Generate and run migrations if you\'ve made any changes to the entity', $io);
     }
 
     public function setApplication(Application $application)

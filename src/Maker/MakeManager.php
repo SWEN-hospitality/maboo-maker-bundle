@@ -115,7 +115,7 @@ class MakeManager extends PlainMaker
         $domainModelFields = $this->manipulatorManager->getDomainModelFields($domainModelClassDetails->getFullName());
 
         if (false === $managerExists) {
-            $managerClass = $this->managerClassGenerator->generateManagerClass(
+            $this->managerClassGenerator->generateManagerClass(
                 $managerDetails,
                 $repositoryInterfaceDetails,
                 $domainModelClassDetails,
@@ -126,12 +126,9 @@ class MakeManager extends PlainMaker
             );
 
             $generator->writeChanges();
-        }
 
-        $feedbackMessages = [
-            'Success! Manager generated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+            $this->echoSuccessMessages('Manager generated!', $io);
+        }
     }
 
 }

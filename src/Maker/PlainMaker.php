@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bornfight\MabooMakerBundle\Maker;
 
 use Bornfight\MabooMakerBundle\Services\Interactor;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
@@ -23,6 +24,29 @@ abstract class PlainMaker extends AbstractMaker
 
     public function configureDependencies(DependencyBuilder $dependencies, InputInterface $input = null)
     {
+    }
+
+    /**
+     * @param array|string $feedbackMessages
+     */
+    protected function echoSuccessMessages($feedbackMessages, ConsoleStyle $io)
+    {
+        $messages = (true === is_array($feedbackMessages))
+            ? array_values($feedbackMessages)
+            : [$feedbackMessages];
+
+        $io->block($messages, 'Success! ', 'fg=black;bg=green', ' ', true);
+    }
+    /**
+     * @param array|string $feedbackMessages
+     */
+    protected function echoInfoMessages($feedbackMessages, ConsoleStyle $io)
+    {
+        $messages = (true === is_array($feedbackMessages))
+            ? array_values($feedbackMessages)
+            : [$feedbackMessages];
+
+        $io->block($messages, 'Info ', 'fg=white;bg=blue', ' ', true);
     }
 
     protected function buildCommand(Command $command): self

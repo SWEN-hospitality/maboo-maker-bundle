@@ -88,10 +88,7 @@ class MakeGraphQLSchema extends PlainMaker
         $this->registerMutations($generator, $domainModel);
         $this->registerQueries($generator, $domainModel);
 
-        $feedbackMessages = [
-            'Success! GraphQL schema updated!',
-        ];
-        $io->block($feedbackMessages, 'OK', 'fg=black;bg=green', ' ', true);
+        $this->echoSuccessMessages('GraphQL schema updated!', $io);
     }
 
     /**
