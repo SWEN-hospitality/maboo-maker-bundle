@@ -75,6 +75,14 @@ class Interactor
         $this->fixturesQuestionnaire = $fixturesQuestionnaire;
     }
 
+    public function collectEntityMapperArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
+    {
+        $this->getModule($input, $io, $command);
+        $entity = $this->getEntity($input, $io, $command);
+        $domainModel = $this->getDomainModel($input, $io, $command, $entity);
+        $this->getEntityMapper($input, $io, $command, $domainModel);
+    }
+
     public function collectWriteModelsArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->getModule($input, $io, $command);

@@ -81,7 +81,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
 
         if (true === $this->makerSelection->shouldCreateMapper()) {
-            $this->interactor->getEntityMapper($input, $io, $command, $entity);
+            $this->interactor->collectEntityMapperArguments($input, $io, $command);
         }
 
         if (true === $this->makerSelection->shouldCreateWriteModels()) {

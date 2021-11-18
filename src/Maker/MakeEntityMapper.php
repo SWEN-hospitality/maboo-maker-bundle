@@ -55,10 +55,7 @@ class MakeEntityMapper extends PlainMaker
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getModule($input, $io, $command);
-        $entity = $this->interactor->getEntity($input, $io, $command);
-        $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
-        $this->interactor->getEntityMapper($input, $io, $command, $domainModel);
+        $this->interactor->collectEntityMapperArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
