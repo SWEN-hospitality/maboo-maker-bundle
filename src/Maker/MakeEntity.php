@@ -105,16 +105,13 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
 
         if (true === $classExists) {
             $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
-            $io->text([
-                'Your entity already exists! So let\'s add some new fields!',
-            ]);
+            $this->echoInfoMessages('Your entity already exists! So let\'s add some new fields!', $io);
         } else {
-            $io->text([
-                '',
-                'Entity generated! Now let\'s add some fields!',
+            $this->echoSuccessMessages('Entity generated! Now let\'s add some fields!', $io);
+            $this->echoInfoMessages([
                 'You can always add more fields later manually or by re-running this command.',
-                'Identifier field will be added by default (UUID [string])'
-            ]);
+                'Identifier field will be added by default (UUID [string])',
+            ], $io);
         }
 
         $currentFields = $this->getPropertyNames($entityClassDetails->getFullName());
