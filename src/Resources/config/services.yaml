@@ -40,6 +40,9 @@ services:
   bornfight_maboo_maker.mutation.questionnaire:
     class: Bornfight\MabooMakerBundle\Maker\Mutation\Questionnaire
 
+  bornfight_maboo_maker.fixtures.questionnaire:
+    class: Bornfight\MabooMakerBundle\Maker\Fixtures\Questionnaire
+
   bornfight_maboo_maker.doctrine_helper:
     class: Bornfight\MabooMakerBundle\Doctrine\DoctrineHelper
     arguments:
