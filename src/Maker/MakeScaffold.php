@@ -85,9 +85,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
 
         if (true === $this->makerSelection->shouldCreateWriteModels()) {
-            $domainModel = $this->interactor->getDomainModel($input, $io, $command, $entity);
-            $this->interactor->getCreateWriteModel($input, $io, $command, $domainModel);
-            $this->interactor->getUpdateWriteModel($input, $io, $command, $domainModel);
+            $this->interactor->collectWriteModelsArguments($input, $io, $command);
         }
 
         if (true === $this->makerSelection->shouldCreateRepository()) {
