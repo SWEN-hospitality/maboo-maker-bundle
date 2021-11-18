@@ -71,7 +71,7 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getEntity($input, $io, $command);
+        $this->interactor->collectEntityArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)

@@ -75,6 +75,11 @@ class Interactor
         $this->fixturesQuestionnaire = $fixturesQuestionnaire;
     }
 
+    public function collectEntityArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
+    {
+        $this->getEntity($input, $io, $command);
+    }
+
     public function collectDomainModelArguments(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->getModule($input, $io, $command);
