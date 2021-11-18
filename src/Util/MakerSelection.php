@@ -67,4 +67,9 @@ class MakerSelection
     {
         return in_array(self::MUTATION, $this->selectedComponents);
     }
+
+    public function shouldCreateFixtures(): bool
+    {
+        return in_array(self::FIXTURES, $this->selectedComponents);
+    }
 }
