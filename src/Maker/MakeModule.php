@@ -46,7 +46,7 @@ class MakeModule extends PlainMaker
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
     {
-        $this->interactor->getModule($input, $io, $command);
+        $this->interactor->collectModuleArguments($input, $io, $command);
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
