@@ -158,6 +158,11 @@ services:
     arguments:
       - '@maker.generator'
 
+  bornfight_maboo_maker.service.infrastructure.fixtures_class_generator:
+    class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Infrastructure\FixturesClassGenerator
+    arguments:
+      - '@maker.generator'
+
   bornfight_maboo_maker.service.infrastructure.graph_ql_schema_generator:
     class: Bornfight\MabooMakerBundle\Services\ClassGenerator\Infrastructure\GraphQLSchemaGenerator
     arguments:
