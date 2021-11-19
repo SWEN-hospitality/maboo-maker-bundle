@@ -92,9 +92,9 @@ class MakeDomainModel extends PlainMaker
         );
         $currentEntityFields = $this->manipulatorManager->getEntityFields($entityClassDetails->getFullName());
 
-        $currentDomainModelFields = $this->manipulatorManager->getDomainModelFields($domainModelFullName);
 
         $domainModelManipulator = $this->manipulatorManager->createDomainModelManipulator($domainModelFullName);
+        $currentDomainModelFields = $domainModelManipulator->getAllFields();
 
         foreach ($currentEntityFields as $entityField) {
             if (null === $entityField) {
