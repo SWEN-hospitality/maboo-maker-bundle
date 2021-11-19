@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bornfight\MabooMakerBundle\Util;
 
+use Bornfight\MabooMakerBundle\Services\ClassManipulator\EntityField;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Bundle\MakerBundle\Util\ClassDetails;
@@ -41,5 +42,19 @@ trait ClassProperties
         $classDetails = new ClassDetails($class);
 
         return $classDetails->getPath();
+    }
+
+    /**
+     * EntityField[] $currentDomainModelFields
+     */
+    public function isFieldAlreadyInClass(array $currentClassFields, EntityField $entityField): bool
+    {
+        return in_array(
+            $entityField->name,
+            array_map(
+                fn (EntityField $field) => $field->name,
+                $currentClassFields
+            )
+        );
     }
 }

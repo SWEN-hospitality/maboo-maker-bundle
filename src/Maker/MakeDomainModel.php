@@ -101,7 +101,7 @@ class MakeDomainModel extends PlainMaker
                 continue;
             }
 
-            if (true === $this->isEntityFieldAlreadyInModel($currentDomainModelFields, $entityField)) {
+            if (true === $this->isFieldAlreadyInClass($currentDomainModelFields, $entityField)) {
                 continue;
             }
 
@@ -116,19 +116,5 @@ class MakeDomainModel extends PlainMaker
         }
 
         $this->echoSuccessMessages('Domain model updated!', $io);
-    }
-
-    /**
-     * EntityField[] $currentDomainModelFields
-     */
-    private function isEntityFieldAlreadyInModel(array $currentDomainModelFields, EntityField $entityField): bool
-    {
-        return in_array(
-            $entityField->name,
-            array_map(
-                fn (EntityField $field) => $field->name,
-                $currentDomainModelFields
-            )
-        );
     }
 }
