@@ -48,6 +48,7 @@ class MakeResolver extends PlainMaker
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
+            ->addEntityArgumentToCommand($command, $inputConfig)
             ->addDomainModelArgumentToCommand($command, $inputConfig)
             ->addRepositoryInterfaceArgumentToCommand($command, $inputConfig)
             ->addResolverArgumentToCommand($command, $inputConfig);

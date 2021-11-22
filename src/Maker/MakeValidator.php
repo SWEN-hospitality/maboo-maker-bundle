@@ -56,6 +56,7 @@ class MakeValidator extends PlainMaker
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
+            ->addEntityArgumentToCommand($command, $inputConfig)
             ->addDomainModelArgumentToCommand($command, $inputConfig)
             ->addRepositoryInterfaceArgumentToCommand($command, $inputConfig)
             ->addSpecificationInterfaceArgumentToCommand($command, $inputConfig)
