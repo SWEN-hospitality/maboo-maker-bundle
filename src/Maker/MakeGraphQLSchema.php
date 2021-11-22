@@ -54,6 +54,7 @@ class MakeGraphQLSchema extends PlainMaker
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
+            ->addEntityArgumentToCommand($command, $inputConfig)
             ->addDomainModelArgumentToCommand($command, $inputConfig);
     }
 
