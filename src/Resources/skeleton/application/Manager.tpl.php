@@ -20,7 +20,7 @@ class <?= $class_name . "\n" ?>
 
     public function __construct(
         UuidGeneratorInterface $uuidGenerator,
-        <?= $repository_interface_short_name ?> $<?= $repository_property_name . "\n" ?>,
+        <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>,
         <?= $validator_short_name ?> $<?= $validator_property_name . "\n" ?>
     ) {
         $this->uuidGenerator = $uuidGenerator;
