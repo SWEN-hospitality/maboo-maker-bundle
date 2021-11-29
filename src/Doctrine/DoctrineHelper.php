@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony MakerBundle package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Bornfight\MabooMakerBundle\Doctrine;
 
 use Doctrine\DBAL\Connection;
@@ -28,7 +19,7 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Ryan Weaver <ryan@knpuniversity.com>
  * @author Sadicov Vladimir <sadikoff@gmail.com>
- * @author Goran Hrženjak
+ * @author Goran Hrženjak <goran.hrzenjak@bornfight.com>
  */
 class DoctrineHelper
 {
