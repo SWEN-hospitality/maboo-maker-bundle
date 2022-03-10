@@ -19,7 +19,6 @@ use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputAwareMakerInterface;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Str;
-use Symfony\Bundle\MakerBundle\Util\ClassDetails;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -82,9 +81,6 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
         );
 
         $classExists = class_exists($entityClassDetails->getFullName());
-        if (true === $classExists) {
-            throw new RuntimeCommandException('Updating existing entities is not yet supported!');
-        }
 
         if (false === $classExists) {
             $entityPath = $this->entityClassGenerator->generateEntityClass(
@@ -92,6 +88,8 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
             );
 
             $generator->writeChanges();
+        } else {
+            $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
         }
 
         if (!$this->doesEntityUseAnnotationMapping($entityClassDetails->getFullName())) {
@@ -104,7 +102,6 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
         }
 
         if (true === $classExists) {
-            $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
             $this->echoInfoMessages('Your entity already exists! So let\'s add some new fields!', $io);
         } else {
             $this->echoSuccessMessages('Entity generated! Now let\'s add some fields!', $io);
@@ -162,13 +159,6 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
             'Next: When you\'re ready, create a migration with <info>php bin/console make:migration</info>',
             '',
         ]);
-    }
-
-    private function getPathOfClass(string $class): string
-    {
-        $classDetails = new ClassDetails($class);
-
-        return $classDetails->getPath();
     }
 
     private function doesEntityUseAnnotationMapping(string $className): bool

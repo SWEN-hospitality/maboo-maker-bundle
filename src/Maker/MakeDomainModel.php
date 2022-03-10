@@ -10,7 +10,6 @@ use Bornfight\MabooMakerBundle\Services\Interactor;
 use Bornfight\MabooMakerBundle\Services\NamespaceService;
 use Bornfight\MabooMakerBundle\Util\ClassProperties;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
-use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Component\Console\Command\Command;
@@ -70,12 +69,9 @@ class MakeDomainModel extends PlainMaker
             $model,
             $this->namespaceService->getDomainModelNamespace($module)
         );
+        $domainModelFullName = $domainModelClassDetails->getFullName();
 
-        $classExists = class_exists($domainModelClassDetails->getFullName());
-
-        if (true === $classExists) {
-            throw new RuntimeCommandException('Updating existing models is not yet supported!');
-        }
+        $classExists = class_exists($domainModelFullName);
 
         if (false === $classExists) {
             $domainModelPath = $this->domainModelClassGenerator->generateDomainModelClass(
@@ -83,6 +79,10 @@ class MakeDomainModel extends PlainMaker
             );
 
             $generator->writeChanges();
+
+            $this->echoSuccessMessages('Domain model generated!', $io);
+        } else {
+            $domainModelPath = $this->getPathOfClass($domainModelFullName);
         }
 
         $entityClassDetails = $generator->createClassNameDetails(
@@ -91,12 +91,20 @@ class MakeDomainModel extends PlainMaker
         );
         $currentEntityFields = $this->manipulatorManager->getEntityFields($entityClassDetails->getFullName());
 
-        $domainModelManipulator = $this->manipulatorManager->createDomainModelManipulator(
-            $domainModelClassDetails->getFullName()
-        );
+
+        $domainModelManipulator = $this->manipulatorManager->createDomainModelManipulator($domainModelFullName);
+        $currentDomainModelFields = $domainModelManipulator->getAllFields();
 
         foreach ($currentEntityFields as $entityField) {
             if (null === $entityField) {
+                continue;
+            }
+
+            if (true === $this->isFieldAlreadyInClass($currentDomainModelFields, $entityField)) {
+                continue;
+            }
+
+            if (false === $entityField->isOfAddableType()) {
                 continue;
             }
 
@@ -108,8 +116,8 @@ class MakeDomainModel extends PlainMaker
             foreach ($fileManagerOperations as $path => $manipulatorOrMessage) {
                 $this->manipulatorManager->dumpFile($path, $manipulatorOrMessage->getSourceCode());
             }
-
-            $this->echoSuccessMessages('Domain model generated!', $io);
         }
+
+        $this->echoSuccessMessages('Domain model updated!', $io);
     }
 }

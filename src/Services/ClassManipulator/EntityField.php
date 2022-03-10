@@ -54,6 +54,18 @@ class EntityField
         $this->typeHint = $property->type->type->name;
     }
 
+    public function isOfPrimitiveType(): bool
+    {
+        $primitiveTypes = ['int', 'string', 'float', 'bool', 'Date', 'DateTime'];
+
+        return true === in_array($this->typeHint, $primitiveTypes);
+    }
+
+    public function isOfAddableType(): bool
+    {
+        return $this->isOfPrimitiveType();
+    }
+
     public function getOptions(): array
     {
         return [

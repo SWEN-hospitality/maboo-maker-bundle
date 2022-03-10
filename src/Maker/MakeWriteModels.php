@@ -8,6 +8,7 @@ use Bornfight\MabooMakerBundle\Services\ClassGenerator\Domain\WriteModelsClassGe
 use Bornfight\MabooMakerBundle\Services\ClassManipulator\ClassManipulatorManager;
 use Bornfight\MabooMakerBundle\Services\Interactor;
 use Bornfight\MabooMakerBundle\Services\NamespaceService;
+use Bornfight\MabooMakerBundle\Util\ClassProperties;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Generator;
@@ -17,6 +18,8 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeWriteModels extends PlainMaker
 {
+    use ClassProperties;
+
     private WriteModelsClassGenerator $writeModelsClassGenerator;
     private NamespaceService $namespaceService;
     private ClassManipulatorManager $manipulatorManager;
@@ -71,16 +74,15 @@ class MakeWriteModels extends PlainMaker
             $createWriteModel,
             $this->namespaceService->getWriteModelsNamespace($module)
         );
+        $createWriteModelFullName = $createWriteModelClassDetails->getFullName();
         $updateWriteModelClassDetails = $generator->createClassNameDetails(
             $updateWriteModel,
             $this->namespaceService->getWriteModelsNamespace($module)
         );
+        $updateWriteModelFullName = $updateWriteModelClassDetails->getFullName();
 
-        $createWriteModelClassExists = class_exists($createWriteModelClassDetails->getFullName());
-        $updateWriteModelClassExists = class_exists($createWriteModelClassDetails->getFullName());
-        if (true === $createWriteModelClassExists || true === $updateWriteModelClassExists) {
-            throw new RuntimeCommandException('Updating existing write models is not yet supported!');
-        }
+        $createWriteModelClassExists = class_exists($createWriteModelFullName);
+        $updateWriteModelClassExists = class_exists($updateWriteModelFullName);
 
         if (false === $createWriteModelClassExists) {
             $createWriteModelPath = $this->writeModelsClassGenerator->generateCreateWriteModelClass(
@@ -88,6 +90,10 @@ class MakeWriteModels extends PlainMaker
             );
 
             $generator->writeChanges();
+
+            $this->echoSuccessMessages('Create write model generated!', $io);
+        } else {
+            $createWriteModelPath = $this->getPathOfClass($createWriteModelFullName);
         }
 
         if (false === $updateWriteModelClassExists) {
@@ -96,6 +102,10 @@ class MakeWriteModels extends PlainMaker
             );
 
             $generator->writeChanges();
+
+            $this->echoSuccessMessages('Update write model generated!', $io);
+        } else {
+            $updateWriteModelPath = $this->getPathOfClass($updateWriteModelFullName);
         }
 
         $entityClassDetails = $generator->createClassNameDetails(
@@ -104,12 +114,10 @@ class MakeWriteModels extends PlainMaker
         );
         $currentEntityFields = $this->manipulatorManager->getEntityFields($entityClassDetails->getFullName());
 
-        $createWriteModelManipulator = $this->manipulatorManager->createWriteModelManipulator(
-            $createWriteModelClassDetails->getFullName()
-        );
-        $updateWriteModelManipulator = $this->manipulatorManager->createWriteModelManipulator(
-            $updateWriteModelClassDetails->getFullName()
-        );
+        $createWriteModelManipulator = $this->manipulatorManager->createWriteModelManipulator($createWriteModelFullName);
+        $updateWriteModelManipulator = $this->manipulatorManager->createWriteModelManipulator($updateWriteModelFullName);
+        $currentCreateWriteModelFields = $createWriteModelManipulator->getAllFields();
+        $currentUpdateWriteModelFields = $updateWriteModelManipulator->getAllFields();
 
         foreach ($currentEntityFields as $entityField) {
             if (null === $entityField) {
@@ -118,17 +126,28 @@ class MakeWriteModels extends PlainMaker
 
             $fileManagerOperations = [];
 
-            $fileManagerOperations[$createWriteModelPath] = $createWriteModelManipulator;
-            $createWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+            $shouldAddToCreateWriteModel =
+                false === $this->isFieldAlreadyInClass($currentCreateWriteModelFields, $entityField) &&
+                true === $entityField->isOfAddableType();
+            $shouldAddToUpdateWriteModel =
+                false === $this->isFieldAlreadyInClass($currentUpdateWriteModelFields, $entityField) &&
+                true === $entityField->isOfAddableType();
 
-            $fileManagerOperations[$updateWriteModelPath] = $updateWriteModelManipulator;
-            $updateWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+            if ($shouldAddToCreateWriteModel) {
+                $fileManagerOperations[$createWriteModelPath] = $createWriteModelManipulator;
+                $createWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+            }
+
+            if ($shouldAddToUpdateWriteModel) {
+                $fileManagerOperations[$updateWriteModelPath] = $updateWriteModelManipulator;
+                $updateWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+            }
 
             foreach ($fileManagerOperations as $path => $manipulator) {
                 $this->manipulatorManager->dumpFile($path, $manipulator->getSourceCode());
             }
         }
 
-        $this->echoSuccessMessages('Write models generated and updated!', $io);
+        $this->echoSuccessMessages('Write models updated!', $io);
     }
 }
