@@ -10,8 +10,6 @@ use Symfony\Bundle\MakerBundle\Doctrine\EntityRelation;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Validator;
 
-use function in_array;
-
 class EntityTypes
 {
     public function getAllTypes(): array
@@ -85,8 +83,6 @@ class EntityTypes
     public function getAllValidTypes(): array
     {
         $types = $this->getAllTypes();
-        // remove deprecated json_array
-        unset($types[Type::JSON_ARRAY]);
 
         return array_merge(
             array_keys($types),
