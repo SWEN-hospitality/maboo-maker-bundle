@@ -126,12 +126,19 @@ class MakeWriteModels extends PlainMaker
 
             $fileManagerOperations = [];
 
-            if (false === $this->isFieldAlreadyInClass($currentCreateWriteModelFields, $entityField)) {
+            $shouldAddToCreateWriteModel =
+                false === $this->isFieldAlreadyInClass($currentCreateWriteModelFields, $entityField) &&
+                true === $entityField->isOfAddableType();
+            $shouldAddToUpdateWriteModel =
+                false === $this->isFieldAlreadyInClass($currentUpdateWriteModelFields, $entityField) &&
+                true === $entityField->isOfAddableType();
+
+            if ($shouldAddToCreateWriteModel) {
                 $fileManagerOperations[$createWriteModelPath] = $createWriteModelManipulator;
                 $createWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
             }
 
-            if (false === $this->isFieldAlreadyInClass($currentUpdateWriteModelFields, $entityField)) {
+            if ($shouldAddToUpdateWriteModel) {
                 $fileManagerOperations[$updateWriteModelPath] = $updateWriteModelManipulator;
                 $updateWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
             }

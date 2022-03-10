@@ -6,7 +6,6 @@ namespace Bornfight\MabooMakerBundle\Maker;
 
 use Bornfight\MabooMakerBundle\Services\ClassGenerator\Domain\DomainModelClassGenerator;
 use Bornfight\MabooMakerBundle\Services\ClassManipulator\ClassManipulatorManager;
-use Bornfight\MabooMakerBundle\Services\ClassManipulator\EntityField;
 use Bornfight\MabooMakerBundle\Services\Interactor;
 use Bornfight\MabooMakerBundle\Services\NamespaceService;
 use Bornfight\MabooMakerBundle\Util\ClassProperties;
