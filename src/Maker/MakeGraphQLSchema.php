@@ -339,7 +339,7 @@ class MakeGraphQLSchema extends PlainMaker
             $newData['Mutation']['config']['fields']['create' . $domainModel] = [
                 'type' => $this->getCreateMutationPayloadTypeName($domainModel) . '!',
                 'access' => '@=hasRole(constant("' .$role . '"))',
-                'resolve' => sprintf('@=mutation("Create%s", [args])', $domainModel),
+                'resolve' => sprintf('@=mutation("Create%s", args.input)', $domainModel),
                 'args' => [
                     'input' => [
                         'type' => $this->getCreateMutationInputTypeName($domainModel) . '!',
@@ -350,7 +350,7 @@ class MakeGraphQLSchema extends PlainMaker
             $newData['Mutation']['config']['fields']['update' . $domainModel] = [
                 'type' => $this->getUpdateMutationPayloadTypeName($domainModel) . '!',
                 'access' => '@=hasRole(constant("' .$role . '"))',
-                'resolve' => sprintf('@=mutation("Update%s", [args])', $domainModel),
+                'resolve' => sprintf('@=mutation("Update%s", args.input)', $domainModel),
                 'args' => [
                     'input' => [
                         'type' => $this->getUpdateMutationInputTypeName($domainModel) . '!',
@@ -361,7 +361,7 @@ class MakeGraphQLSchema extends PlainMaker
             $newData['Mutation']['config']['fields']['delete' . $domainModel] = [
                 'type' => $this->getDeleteMutationPayloadTypeName($domainModel) . '!',
                 'access' => '@=hasRole(constant("' .$role . '"))',
-                'resolve' => sprintf('@=mutation("Delete%s", [args])', $domainModel),
+                'resolve' => sprintf('@=mutation("Delete%s", args.input)', $domainModel),
                 'args' => [
                     'input' => [
                         'type' => $this->getDeleteMutationInputTypeName($domainModel) . '!',
