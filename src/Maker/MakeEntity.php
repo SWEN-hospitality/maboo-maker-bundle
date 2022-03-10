@@ -88,6 +88,8 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
             );
 
             $generator->writeChanges();
+        } else {
+            $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
         }
 
         if (!$this->doesEntityUseAnnotationMapping($entityClassDetails->getFullName())) {
@@ -100,7 +102,6 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
         }
 
         if (true === $classExists) {
-            $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
             $this->echoInfoMessages('Your entity already exists! So let\'s add some new fields!', $io);
         } else {
             $this->echoSuccessMessages('Entity generated! Now let\'s add some fields!', $io);

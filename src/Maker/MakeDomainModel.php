@@ -105,6 +105,10 @@ class MakeDomainModel extends PlainMaker
                 continue;
             }
 
+            if (false === $entityField->isOfAddableType()) {
+                continue;
+            }
+
             $fileManagerOperations = [];
             $fileManagerOperations[$domainModelPath] = $domainModelManipulator;
 
