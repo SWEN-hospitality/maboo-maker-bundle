@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace <?= $namespace ?>;
 
 use <?= $manager_full_class_name ?>;
-use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
@@ -19,12 +18,12 @@ class <?= $class_name ?> implements MutationInterface, AliasedInterface
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @return array<string, mixed>
      */
-    public function create<?= $domain_model ?>(Argument $argument): array
+    public function create<?= $domain_model ?>(array $data): array
     {
-        $data = $argument->offsetGet('input');
-
         $<?= $object_name ?> = $this-><?= $manager_property_name ?>->create($data);
 
         return [
@@ -33,12 +32,12 @@ class <?= $class_name ?> implements MutationInterface, AliasedInterface
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @return array<string, mixed>
      */
-    public function update<?= $domain_model ?>(Argument $argument): array
+    public function update<?= $domain_model ?>(array $data): array
     {
-        $data = $argument->offsetGet('input');
-
         $<?= $object_name ?> = $this-><?= $manager_property_name ?>->update($data);
 
         return [
@@ -47,12 +46,12 @@ class <?= $class_name ?> implements MutationInterface, AliasedInterface
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @return array<string, mixed>
      */
-    public function delete<?= $domain_model ?>(Argument $argument): array
+    public function delete<?= $domain_model ?>(array $data): array
     {
-        $data = $argument->offsetGet('input');
-
         $<?= $object_name ?>Id = $this-><?= $manager_property_name ?>->delete($data);
 
         return [

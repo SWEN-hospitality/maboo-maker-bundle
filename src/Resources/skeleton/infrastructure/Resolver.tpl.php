@@ -7,9 +7,9 @@ namespace <?= $namespace ?>;
 use <?= $domain_model_full_class_name ?>;
 use <?= $repository_interface_full_class_name ?>;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
-use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
-class <?= $class_name ?> implements ResolverInterface, AliasedInterface
+class <?= $class_name ?> implements QueryInterface, AliasedInterface
 {
     private <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>;
 
