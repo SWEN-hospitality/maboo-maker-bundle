@@ -54,6 +54,7 @@ class MakeGraphQLSchema extends PlainMaker
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
+            ->addEntityArgumentToCommand($command, $inputConfig)
             ->addDomainModelArgumentToCommand($command, $inputConfig);
     }
 
@@ -304,12 +305,12 @@ class MakeGraphQLSchema extends PlainMaker
                         'type' => 'ID!',
                     ],
                 ],
-                'resolve' => sprintf('@=resolver("%s", [args["id"]])', $resourceName),
+                'resolve' => sprintf('@=query("%s", args.id)', $resourceName),
             ];
 
             $newData['Query']['config']['fields'][$collectionNameLower] = [
                 'type' => sprintf('[%s!]!', $resourceName),
-                'resolve' => sprintf('@=resolver("%s")', $collectionName),
+                'resolve' => sprintf('@=query("%s")', $collectionName),
             ];
 
             $manipulator->setData($newData);

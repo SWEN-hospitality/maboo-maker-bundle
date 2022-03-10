@@ -20,6 +20,18 @@ class EntityField
         $this->name = $property->props[0]->name->name;
 
         if (!($property->type instanceof NullableType)) {
+            if ($property->type instanceof FullyQualified) {
+                $this->typeHint = $property->type->parts[0];
+
+                return;
+            }
+
+            if ($property->type instanceof Name) {
+                $this->typeHint = $property->type->parts[0];
+
+                return;
+            }
+
             $this->typeHint = $property->type->name;
 
             return;

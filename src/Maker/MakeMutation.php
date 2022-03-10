@@ -44,6 +44,7 @@ class MakeMutation extends PlainMaker
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
+            ->addEntityArgumentToCommand($command, $inputConfig)
             ->addDomainModelArgumentToCommand($command, $inputConfig)
             ->addManagerArgumentToCommand($command, $inputConfig)
             ->addMutationArgumentToCommand($command, $inputConfig);

@@ -7,9 +7,10 @@ namespace <?= $namespace ?>;
 use <?= $entity_full_class_name ?> as <?= $entity_alias ?>;
 use App\Shared\Application\Factory\UuidGeneratorInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class <?= $class_name ?> extends Fixture
+class <?= $class_name ?> extends Fixture implements FixtureGroupInterface
 {
     private UuidGeneratorInterface $uuidGenerator;
 
@@ -49,5 +50,12 @@ class <?= $class_name ?> extends Fixture
 <?php endforeach; ?>
             ],
         ];
+    }
+
+    public static function getGroups(): array
+    {
+        return [
+           'default',
+       ];
     }
 }

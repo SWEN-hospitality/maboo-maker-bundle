@@ -51,6 +51,7 @@ class MakeManager extends PlainMaker
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
+            ->addEntityArgumentToCommand($command, $inputConfig)
             ->addDomainModelArgumentToCommand($command, $inputConfig)
             ->addCreateWriteModelArgumentToCommand($command, $inputConfig)
             ->addUpdateWriteModelArgumentToCommand($command, $inputConfig)
