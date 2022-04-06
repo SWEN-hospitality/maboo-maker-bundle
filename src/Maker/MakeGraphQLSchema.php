@@ -299,7 +299,7 @@ class MakeGraphQLSchema extends PlainMaker
 
 
             $newData['Query']['config']['fields'][$resourceNameLower] = [
-                'type' => sprintf('%s!', $resourceName),
+                'type' => sprintf('%s', $resourceName),
                 'args' => [
                     'id' => [
                         'type' => 'ID!',
