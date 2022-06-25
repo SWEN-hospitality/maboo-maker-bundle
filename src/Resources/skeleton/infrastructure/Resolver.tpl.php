@@ -11,11 +11,8 @@ use Overblog\GraphQLBundle\Definition\Resolver\QueryInterface;
 
 class <?= $class_name ?> implements QueryInterface, AliasedInterface
 {
-    private <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>;
-
-    public function __construct(<?= $repository_interface_short_name ?> $<?= $repository_property_name ?>)
+    public function __construct(private readonly <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>)
     {
-        $this-><?= $repository_property_name ?> = $<?= $repository_property_name ?>;
     }
 
     public function resolveOne(string $id): ?<?= $domain_model_short_name . "\n" ?>
