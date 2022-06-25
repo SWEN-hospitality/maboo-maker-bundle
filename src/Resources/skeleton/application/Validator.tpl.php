@@ -41,12 +41,9 @@ use App\Shared\Application\Validator\ValidatorException;
 
 class <?= $class_name ?> extends Validator
 {
-    private <?= $specification_short_name ?> $<?= $specification_property_name ?>;
-
     public function __construct(
-        <?= $specification_short_name ?> $<?= $specification_property_name . "\n" ?>
+        private readonly <?= $specification_short_name ?> $<?= $specification_property_name . "\n" ?>
     ) {
-        $this-><?= $specification_property_name ?> = $<?= $specification_property_name ?>;
     }
 
     /**
