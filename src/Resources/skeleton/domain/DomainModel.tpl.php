@@ -6,7 +6,13 @@ namespace <?= $namespace ?>;
 
 class <?= $class_name."\n" ?>
 {
-    public function __construct()
+    public function __construct(
+        private readonly string $id
+    ) {
+    }
+
+    public function getId(): string
     {
+        return $this->id;
     }
 }

@@ -56,6 +56,23 @@ abstract class ClassManipulator extends ClassSourceManipulator
         );
     }
 
+    protected function addPromotedProperty(
+        string $name,
+        $type,
+        bool $isNullable,
+        array $comments = [],
+        array $attributes = [],
+        bool $isPrivate = true,
+        bool $isReadonly = true
+    ) {
+        $defaultValue = null;
+        if ('array' === $type) {
+            $defaultValue = new Array_([], ['kind' => Array_::KIND_SHORT]);
+        }
+
+        $this->addParamToConstructor($name, $type, $defaultValue, $isNullable, $isPrivate, $isReadonly);
+    }
+
     /**
      * @param string|Name|NullableType|Identifier $type
      */

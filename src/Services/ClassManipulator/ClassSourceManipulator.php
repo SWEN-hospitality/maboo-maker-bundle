@@ -15,6 +15,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
@@ -820,15 +821,35 @@ class ClassSourceManipulator
         $this->updateSourceCodeFromNewStmts();
     }
 
-    protected function addParamToConstructor(string $propertyName, $typeHint, $defaultValue, bool $isNullable)
-    {
+    protected function addParamToConstructor(
+        string $propertyName,
+        $typeHint,
+        $defaultValue,
+        bool $isNullable,
+        bool $isPrivate = false,
+        bool $isReadonly = false
+    ) {
         $constructorNode = $this->getConstructorNode(); //->getParams();
 
-        $constructorNode->params[] = new Node\Param(
+        $flags = 0;
+        if (true === $isPrivate) {
+            $flags += Class_::MODIFIER_PRIVATE;
+        }
+        if (true === $isReadonly) {
+            $flags += Class_::MODIFIER_READONLY;
+        }
+
+        $paramNode = new Node\Param(
             new Node\Expr\Variable($propertyName),
             $defaultValue,
-            $isNullable ? new Node\NullableType($typeHint) : $typeHint
+            $isNullable ? new Node\NullableType($typeHint) : $typeHint,
+            false,
+            false,
+            [],
+            $flags
         );
+
+        $constructorNode->params[] = $paramNode;
 
         $this->updateSourceCodeFromNewStmts();
     }
