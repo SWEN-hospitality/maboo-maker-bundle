@@ -20,17 +20,15 @@ use Doctrine\ORM\Mapping as ORM;
 <?php endif?>
 class <?= $class_name."\n" ?>
 {
-    <?php if (!$doctrine_use_attributes): ?>/**
-     * @ORM\Id()
-     * @ORM\Column(type="string", length=255)
-     */
-    <?php else: ?>#[ORM\Id]
-    #[ORM\Column(type: 'string', length: 255)]
-    <?php endif ?>private string $id;
-
-    public function __construct(string $id)
-    {
-        $this->id = $id;
+    public function __construct(
+        <?php if (!$doctrine_use_attributes): ?>/**
+        * @ORM\Id()
+        * @ORM\Column(type="string", length=255)
+        */
+        <?php else: ?>#[ORM\Id]
+        #[ORM\Column(type: 'string', length: 255)]
+        <?php endif ?>private string $id,
+    ) {
     }
 
     public function getId(): string
