@@ -32,9 +32,7 @@ use App\Shared\Application\Validator\Sequence\NotEmptyIntegerSequence;
 <?php if (true == $use_is_not_empty_numeric_rule): ?>
 use App\Shared\Application\Validator\Sequence\NotEmptyNumericSequence;
 <?php endif ?>
-<?php if (true == $use_is_not_empty_string_rule): ?>
 use App\Shared\Application\Validator\Sequence\NotEmptyStringSequence;
-<?php endif ?>
 use App\Shared\Application\Validator\ValidationErrorList;
 use App\Shared\Application\Validator\Validator;
 use App\Shared\Application\Validator\ValidatorException;
