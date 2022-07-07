@@ -827,7 +827,8 @@ class ClassSourceManipulator
         $defaultValue,
         bool $isNullable,
         bool $isPrivate = false,
-        bool $isReadonly = false
+        bool $isReadonly = false,
+        array $comments = []
     ) {
         $constructorNode = $this->getConstructorNode(); //->getParams();
 
@@ -848,6 +849,10 @@ class ClassSourceManipulator
             [],
             $flags
         );
+
+        if ($comments && $this->useAnnotations) {
+            $paramNode->setDocComment(BuilderHelpers::normalizeDocComment($this->createDocBlock($comments)));
+        }
 
         $constructorNode->params[] = $paramNode;
 

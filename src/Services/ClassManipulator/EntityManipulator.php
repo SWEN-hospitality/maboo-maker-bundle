@@ -26,11 +26,10 @@ class EntityManipulator extends ClassManipulator
         $typeHint = $this->getTypeHint($columnOptions['type']);
         $nullable = $columnOptions['nullable'] ?? false;
         $isId = (bool) ($columnOptions['id'] ?? false);
-        $attributes = [];
 
         $comments[] = $this->buildAnnotationLine('@ORM\Column', $columnOptions);
 
-        $this->addClassField($propertyName, $typeHint, $nullable, $comments, $attributes);
+        $this->addClassFieldAsPromotedProperty($propertyName, $typeHint, $nullable, $comments);
         $this->addGetter($propertyName,$typeHint, $nullable);
 
         // don't generate setters for id fields
