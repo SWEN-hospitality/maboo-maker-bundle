@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use Symfony\Bundle\MakerBundle\Str;
 
 class EntityManipulator extends ClassManipulator
 {
@@ -24,17 +25,19 @@ class EntityManipulator extends ClassManipulator
     public function addField(string $propertyName, array $columnOptions, array $comments = []): void
     {
         $typeHint = $this->getTypeHint($columnOptions['type']);
+        $typeHintShortName = Str::getShortClassName($typeHint);
         $nullable = $columnOptions['nullable'] ?? false;
         $isId = (bool) ($columnOptions['id'] ?? false);
 
         $comments[] = $this->buildAnnotationLine('@ORM\Column', $columnOptions);
 
-        $this->addClassFieldAsPromotedProperty($propertyName, $typeHint, $nullable, $comments);
-        $this->addGetter($propertyName,$typeHint, $nullable);
+        $this->addClassFieldAsPromotedProperty($propertyName, $typeHintShortName, $nullable, $comments);
+        $this->addUseStatementIfNecessary($typeHint);
+        $this->addGetter($propertyName, $typeHintShortName, $nullable);
 
         // don't generate setters for id fields
         if (!$isId) {
-            $this->addEntitySetter($propertyName, $typeHint, $nullable);
+            $this->addEntitySetter($propertyName, $typeHintShortName, $nullable);
         }
     }
 
@@ -72,7 +75,6 @@ class EntityManipulator extends ClassManipulator
             case 'text':
             case 'guid':
             case 'bigint':
-            case 'decimal':
                 return 'string';
 
             case 'array':
@@ -83,6 +85,10 @@ class EntityManipulator extends ClassManipulator
 
             case 'boolean':
                 return 'bool';
+
+            case 'decimal':
+            case 'ap_decimal':
+                return 'Decimal\\Decimal';
 
             case 'integer':
             case 'smallint':
@@ -95,16 +101,19 @@ class EntityManipulator extends ClassManipulator
             case 'datetimetz':
             case 'date':
             case 'time':
-                return '\\' . DateTime::class;
+                return DateTime::class;
 
             case 'datetime_immutable':
             case 'datetimetz_immutable':
             case 'date_immutable':
             case 'time_immutable':
-                return '\\' . DateTimeImmutable::class;
+                return DateTimeImmutable::class;
 
             case 'dateinterval':
-                return '\\' . DateInterval::class;
+                return DateInterval::class;
+
+            case 'date_range':
+                return 'App\\Shared\\Domain\\ValueObject\\DateTimeRange';
 
             case 'object':
             case 'binary':

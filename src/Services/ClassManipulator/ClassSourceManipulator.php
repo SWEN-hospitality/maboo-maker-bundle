@@ -892,6 +892,10 @@ class ClassSourceManipulator
             return $shortClassName;
         }
 
+        if (in_array($shortClassName, ['string', 'bool', 'int', 'decimal', 'float'])) {
+            return $shortClassName;
+        }
+
         $namespaceNode = $this->getNamespaceNode();
 
         $targetIndex = null;
@@ -1170,7 +1174,12 @@ class ClassSourceManipulator
 
     private function isInSameNamespace($class): bool
     {
-        $namespace = substr($class, 0, strrpos($class, '\\'));
+        $lastSlashPosition = strrpos($class, '\\');
+        if (false === $lastSlashPosition) {
+            $namespace = $class;
+        } else {
+            $namespace = substr($class, 0, $lastSlashPosition);
+        }
 
         return $this->getNamespaceNode()->name->toCodeString() === $namespace;
     }

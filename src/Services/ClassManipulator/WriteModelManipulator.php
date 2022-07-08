@@ -8,16 +8,21 @@ use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use Symfony\Bundle\MakerBundle\Str;
 
 class WriteModelManipulator extends ClassManipulator
 {
     public function addField(string $propertyName, array $columnOptions, array $comments = []): void
     {
         $typeHint = $columnOptions['typeHint'];
+        $typeHintShortName = Str::getShortClassName($typeHint);
+
         $nullable = $columnOptions['nullable'] ?? false;
         $attributes = [];
 
-        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments, $attributes, false, true);
+        $this->addPromotedProperty($propertyName, $typeHintShortName, $nullable, $comments, $attributes, false, true);
+
+        $this->addUseStatementIfNecessary($typeHint);
     }
 
     /**
