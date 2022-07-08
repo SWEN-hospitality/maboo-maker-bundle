@@ -827,6 +827,7 @@ class ClassSourceManipulator
         $defaultValue,
         bool $isNullable,
         bool $isPrivate = false,
+        bool $isPublic = false,
         bool $isReadonly = false,
         array $comments = []
     ) {
@@ -835,6 +836,9 @@ class ClassSourceManipulator
         $flags = 0;
         if (true === $isPrivate) {
             $flags += Class_::MODIFIER_PRIVATE;
+        }
+        if (true === $isPublic) {
+            $flags += Class_::MODIFIER_PUBLIC;
         }
         if (true === $isReadonly) {
             $flags += Class_::MODIFIER_READONLY;

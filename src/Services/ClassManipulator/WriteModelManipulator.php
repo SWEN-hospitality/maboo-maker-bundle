@@ -17,7 +17,7 @@ class WriteModelManipulator extends ClassManipulator
         $nullable = $columnOptions['nullable'] ?? false;
         $attributes = [];
 
-        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments, $attributes, false, false);
+        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments, $attributes, false, true);
     }
 
     /**
