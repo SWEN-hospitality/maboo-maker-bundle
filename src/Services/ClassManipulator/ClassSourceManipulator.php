@@ -862,7 +862,7 @@ class ClassSourceManipulator
     /**
      * @throws \Exception
      */
-    private function getConstructorNode(): ?Node\Stmt\ClassMethod
+    protected function getConstructorNode(): ?Node\Stmt\ClassMethod
     {
         foreach ($this->getClassNode()->stmts as $classNode) {
             if ($classNode instanceof Node\Stmt\ClassMethod && '__construct' == $classNode->name) {

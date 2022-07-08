@@ -25,7 +25,7 @@ class DomainModelManipulator extends ClassManipulator
         $nullable = $columnOptions['nullable'] ?? false;
         $attributes = [];
 
-        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments, $attributes, true, true);
+        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments, $attributes);
         $this->addGetter($propertyName,$typeHint, $nullable);
     }
 

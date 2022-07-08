@@ -4,54 +4,46 @@ declare(strict_types=1);
 
 namespace Bornfight\MabooMakerBundle\Services\ClassManipulator;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 
 class EntityField
 {
     public string $name;
-    public bool $isNullable = false;
     public string $typeHint;
+    public bool $isNullable = false;
 
-    public function __construct(Property $property)
+    public function __construct(string $name, string $typeHint, bool $isNullable = false)
     {
-        $this->name = $property->props[0]->name->name;
+        $this->name = $name;
+        $this->typeHint = $typeHint;
+        $this->isNullable = $isNullable;
+    }
+
+    public static function fromProperty(Property $property): self
+    {
+        $name = $property->props[0]->name->name;
 
         if (!($property->type instanceof NullableType)) {
-            if ($property->type instanceof FullyQualified) {
-                $this->typeHint = $property->type->parts[0];
-
-                return;
-            }
-
-            if ($property->type instanceof Name) {
-                $this->typeHint = $property->type->parts[0];
-
-                return;
-            }
-
-            $this->typeHint = $property->type->name;
-
-            return;
+            return new self($name, self::getType($property->type));
         }
 
-        $this->isNullable = true;
+        return new self($name, self::getType($property->type->type), true);
+    }
 
-        if ($property->type->type instanceof FullyQualified) {
-            $this->typeHint = $property->type->type->parts[0];
+    public static function fromParam(Param $param): self
+    {
+        $name = $param->var->name;
 
-            return;
+        if (!($param->type instanceof NullableType)) {
+            return new self($name, self::getType($param->type));
         }
 
-        if ($property->type->type instanceof Name) {
-            $this->typeHint = $property->type->type->parts[0];
-
-            return;
-        }
-
-        $this->typeHint = $property->type->type->name;
+        return new self($name, self::getType($param->type->type), true);
     }
 
     public function isOfPrimitiveType(): bool
@@ -72,5 +64,22 @@ class EntityField
             'typeHint' => $this->typeHint,
             'nullable' => $this->isNullable,
         ];
+    }
+
+    private static function getType($type)
+    {
+        if ($type instanceof FullyQualified) {
+            return $type->parts[0];
+        }
+
+        if ($type instanceof Name) {
+            return $type->parts[0];
+        }
+
+        if ($type instanceof Identifier) {
+            return $type->name;
+        }
+
+        return $type->name;
     }
 }

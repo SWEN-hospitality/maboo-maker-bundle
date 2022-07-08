@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 
@@ -21,15 +23,28 @@ abstract class ClassManipulator extends ClassSourceManipulator
      */
     public function getAllFields(): array
     {
-        return array_map(
-            function (Property $property) {
-                return new EntityField($property);
-            },
-            array_filter(
-                $this->getClassNode()->stmts,
-                fn ($stmt) => $stmt instanceof Property
-            )
+        $properties = array_filter(
+            $this->getClassNode()->stmts,
+            fn ($stmt) => $stmt instanceof Property
         );
+
+        $propertyFields = array_map(
+            fn (Property $property) => EntityField::fromProperty($property),
+            $properties
+        );
+
+        $constructorNode = $this->getConstructorNode();
+        $propagatedConstructorParams = array_filter(
+            $constructorNode->getParams(),
+            fn ($param) => $param instanceof Param && true === (bool) $param->flags & Class_::VISIBILITY_MODIFIER_MASK
+        );
+
+        $paramFields = array_map(
+            fn (Param $param) => EntityField::fromParam($param),
+            $propagatedConstructorParams
+        );
+
+        return array_merge($propertyFields, $paramFields);
     }
 
     protected function addClassField(
