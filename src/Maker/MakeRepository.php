@@ -113,7 +113,7 @@ class MakeRepository extends PlainMaker
         );
         $entityMapperClassDetails = $generator->createClassNameDetails(
             $entityMapper,
-            $this->namespaceService->getEntityMapperNamespace()
+            $this->namespaceService->getEntityMapperNamespace($module)
         );
 
         if (false === $repositoryInterfaceExists) {

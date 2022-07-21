@@ -14,7 +14,7 @@ class NamespaceService
     private string $entityNamespace;
     private string $domainModelNamespaceTemplate;
     private string $writeModelsNamespaceTemplate;
-    private string $entityMapperNamespace;
+    private string $entityMapperNamespaceTemplate;
     private string $repositoryInterfaceNamespaceTemplate;
     private string $repositoryClassNamespaceTemplate;
     private string $validatorNamespaceTemplate;
@@ -37,7 +37,7 @@ class NamespaceService
         string $entityNamespace,
         string $domainModelNamespaceTemplate,
         string $writeModelsNamespaceTemplate,
-        string $entityMapperNamespace,
+        string $entityMapperNamespaceTemplate,
         string $repositoryInterfaceNamespaceTemplate,
         string $repositoryClassNamespaceTemplate,
         string $validatorNamespaceTemplate,
@@ -59,7 +59,7 @@ class NamespaceService
         $this->entityNamespace = $entityNamespace;
         $this->domainModelNamespaceTemplate = $domainModelNamespaceTemplate;
         $this->writeModelsNamespaceTemplate = $writeModelsNamespaceTemplate;
-        $this->entityMapperNamespace = $entityMapperNamespace;
+        $this->entityMapperNamespaceTemplate = $entityMapperNamespaceTemplate;
         $this->repositoryInterfaceNamespaceTemplate = $repositoryInterfaceNamespaceTemplate;
         $this->repositoryClassNamespaceTemplate = $repositoryClassNamespaceTemplate;
         $this->validatorNamespaceTemplate = $validatorNamespaceTemplate;
@@ -108,9 +108,9 @@ class NamespaceService
         return str_replace('_module_', $module, $this->repositoryClassNamespaceTemplate);
     }
 
-    public function getEntityMapperNamespace(): string
+    public function getEntityMapperNamespace(string $module): string
     {
-        return $this->entityMapperNamespace;
+        return str_replace('_module_', $module, $this->entityMapperNamespaceTemplate);
     }
 
     public function getManagerNamespace(string $module): string
