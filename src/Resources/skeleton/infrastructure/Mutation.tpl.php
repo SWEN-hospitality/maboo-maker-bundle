@@ -10,11 +10,8 @@ use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 
 class <?= $class_name ?> implements MutationInterface, AliasedInterface
 {
-    private <?= $manager_short_name ?> $<?= $manager_property_name ?>;
-
-    public function __construct(<?= $manager_short_name ?> $<?= $manager_property_name ?>)
+    public function __construct(private readonly <?= $manager_short_name ?> $<?= $manager_property_name ?>)
     {
-        $this-><?= $manager_property_name ?> = $<?= $manager_property_name ?>;
     }
 
     /**

@@ -56,7 +56,7 @@ services:
       - 'Shared\Infrastructure\Persistence\Doctrine\Entity\'
       - '_module_\Domain\Model\'
       - '_module_\Domain\WriteModel\'
-      - 'Shared\Infrastructure\Persistence\Doctrine\Mapper\'
+      - '_module_\Infrastructure\Persistence\Mapper\'
       - '_module_\Domain\Repository\'
       - '_module_\Infrastructure\Persistence\Repository\'
       - '_module_\Application\Validator\'

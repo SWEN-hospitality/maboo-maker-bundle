@@ -14,18 +14,11 @@ use App\Shared\Application\Factory\UuidGeneratorInterface;
 
 class <?= $class_name . "\n" ?>
 {
-    private UuidGeneratorInterface $uuidGenerator;
-    private <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>;
-    private <?= $validator_short_name ?> $<?= $validator_property_name ?>;
-
     public function __construct(
-        UuidGeneratorInterface $uuidGenerator,
-        <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>,
-        <?= $validator_short_name ?> $<?= $validator_property_name . "\n" ?>
+        private readonly UuidGeneratorInterface $uuidGenerator,
+        private readonly <?= $repository_interface_short_name ?> $<?= $repository_property_name ?>,
+        private readonly <?= $validator_short_name ?> $<?= $validator_property_name . "\n" ?>
     ) {
-        $this->uuidGenerator = $uuidGenerator;
-        $this-><?= $repository_property_name ?> = $<?= $repository_property_name ?>;
-        $this-><?= $validator_property_name ?> = $<?= $validator_property_name ?>;
     }
 
     /**

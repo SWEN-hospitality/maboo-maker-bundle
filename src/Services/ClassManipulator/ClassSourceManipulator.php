@@ -15,6 +15,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\Parser;
@@ -820,15 +821,44 @@ class ClassSourceManipulator
         $this->updateSourceCodeFromNewStmts();
     }
 
-    protected function addParamToConstructor(string $propertyName, $typeHint, $defaultValue, bool $isNullable)
-    {
+    protected function addParamToConstructor(
+        string $propertyName,
+        $typeHint,
+        $defaultValue,
+        bool $isNullable,
+        bool $isPrivate = false,
+        bool $isPublic = false,
+        bool $isReadonly = false,
+        array $comments = []
+    ) {
         $constructorNode = $this->getConstructorNode(); //->getParams();
 
-        $constructorNode->params[] = new Node\Param(
+        $flags = 0;
+        if (true === $isPrivate) {
+            $flags += Class_::MODIFIER_PRIVATE;
+        }
+        if (true === $isPublic) {
+            $flags += Class_::MODIFIER_PUBLIC;
+        }
+        if (true === $isReadonly) {
+            $flags += Class_::MODIFIER_READONLY;
+        }
+
+        $paramNode = new Node\Param(
             new Node\Expr\Variable($propertyName),
             $defaultValue,
-            $isNullable ? new Node\NullableType($typeHint) : $typeHint
+            $isNullable ? new Node\NullableType($typeHint) : $typeHint,
+            false,
+            false,
+            [],
+            $flags
         );
+
+        if ($comments && $this->useAnnotations) {
+            $paramNode->setDocComment(BuilderHelpers::normalizeDocComment($this->createDocBlock($comments)));
+        }
+
+        $constructorNode->params[] = $paramNode;
 
         $this->updateSourceCodeFromNewStmts();
     }
@@ -836,7 +866,7 @@ class ClassSourceManipulator
     /**
      * @throws \Exception
      */
-    private function getConstructorNode(): ?Node\Stmt\ClassMethod
+    protected function getConstructorNode(): ?Node\Stmt\ClassMethod
     {
         foreach ($this->getClassNode()->stmts as $classNode) {
             if ($classNode instanceof Node\Stmt\ClassMethod && '__construct' == $classNode->name) {
@@ -859,6 +889,10 @@ class ClassSourceManipulator
     {
         $shortClassName = Str::getShortClassName($class);
         if ($this->isInSameNamespace($class)) {
+            return $shortClassName;
+        }
+
+        if (in_array($shortClassName, ['string', 'bool', 'int', 'decimal', 'float'])) {
             return $shortClassName;
         }
 
@@ -1140,7 +1174,12 @@ class ClassSourceManipulator
 
     private function isInSameNamespace($class): bool
     {
-        $namespace = substr($class, 0, strrpos($class, '\\'));
+        $lastSlashPosition = strrpos($class, '\\');
+        if (false === $lastSlashPosition) {
+            $namespace = $class;
+        } else {
+            $namespace = substr($class, 0, $lastSlashPosition);
+        }
 
         return $this->getNamespaceNode()->name->toCodeString() === $namespace;
     }

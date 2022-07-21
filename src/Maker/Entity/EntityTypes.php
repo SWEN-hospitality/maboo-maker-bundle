@@ -26,6 +26,7 @@ class EntityTypes
                 'boolean' => [],
                 'integer' => ['smallint', 'bigint'],
                 'float' => [],
+                'ap_decimal' => ['decimal']
             ],
             'relation' => [
                 'relation' => 'a wizard will help you build the relation',
@@ -58,7 +59,7 @@ class EntityTypes
         $snakeCasedField = Str::asSnakeCase($fieldName);
 
         if ('_at' === $suffix = substr($snakeCasedField, -3)) {
-            return 'datetime_immutable';
+            return 'datetime';
         }
 
         if ('_id' === $suffix) {
@@ -102,7 +103,7 @@ class EntityTypes
                 '255',
                 [Validator::class, 'validateLength']
             );
-        } elseif ('decimal' === $type) {
+        } elseif ('decimal' === $type || 'ap_decimal' === $type) {
             // 10 is the default value given in \Doctrine\DBAL\Schema\Column::$_precision
             $data['precision'] = (int) $io->ask(
                 'Precision (total number of digits stored: 100.00 would be 5)',
@@ -113,7 +114,7 @@ class EntityTypes
             // 0 is the default value given in \Doctrine\DBAL\Schema\Column::$_scale
             $data['scale'] = (int) $io->ask(
                 'Scale (number of decimals to store: 100.00 would be 2)',
-                '0',
+                '2',
                 [Validator::class, 'validateScale']
             );
         }

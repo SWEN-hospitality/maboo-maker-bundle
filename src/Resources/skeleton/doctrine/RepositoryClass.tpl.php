@@ -18,11 +18,8 @@ use Doctrine\ORM\NoResultException;
  */
 class <?= $class_name ?> implements <?= $repository_interface_short_name . "\n"?>
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     /** @return <?= $domain_model_short_name ?>[] */
@@ -53,7 +50,7 @@ class <?= $class_name ?> implements <?= $repository_interface_short_name . "\n"?
                 ->getSingleResult();
 
             return <?= $entity_mapper_short_name ?>::fromEntityToModel($result);
-        } catch (NoResultException $e) {
+        } catch (NoResultException) {
             return null;
         }
     }
@@ -71,7 +68,7 @@ class <?= $class_name ?> implements <?= $repository_interface_short_name . "\n"?
                 ->getSingleScalarResult();
 
             return true;
-        } catch (NoResultException $e) {
+        } catch (NoResultException) {
             return false;
         }
     }

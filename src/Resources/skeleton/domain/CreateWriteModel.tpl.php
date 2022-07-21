@@ -6,7 +6,8 @@ namespace <?= $namespace ?>;
 
 class <?= $class_name."\n" ?>
 {
-    public function __construct()
-    {
+    public function __construct(
+        public string $id,
+    ) {
     }
 }

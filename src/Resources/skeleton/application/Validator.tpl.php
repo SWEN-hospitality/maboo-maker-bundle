@@ -32,21 +32,16 @@ use App\Shared\Application\Validator\Sequence\NotEmptyIntegerSequence;
 <?php if (true == $use_is_not_empty_numeric_rule): ?>
 use App\Shared\Application\Validator\Sequence\NotEmptyNumericSequence;
 <?php endif ?>
-<?php if (true == $use_is_not_empty_string_rule): ?>
 use App\Shared\Application\Validator\Sequence\NotEmptyStringSequence;
-<?php endif ?>
 use App\Shared\Application\Validator\ValidationErrorList;
 use App\Shared\Application\Validator\Validator;
 use App\Shared\Application\Validator\ValidatorException;
 
 class <?= $class_name ?> extends Validator
 {
-    private <?= $specification_short_name ?> $<?= $specification_property_name ?>;
-
     public function __construct(
-        <?= $specification_short_name ?> $<?= $specification_property_name . "\n" ?>
+        private readonly <?= $specification_short_name ?> $<?= $specification_property_name . "\n" ?>
     ) {
-        $this-><?= $specification_property_name ?> = $<?= $specification_property_name ?>;
     }
 
     /**

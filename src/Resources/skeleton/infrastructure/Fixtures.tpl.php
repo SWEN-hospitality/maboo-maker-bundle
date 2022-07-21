@@ -12,11 +12,8 @@ use Doctrine\Persistence\ObjectManager;
 
 class <?= $class_name ?> extends Fixture implements FixtureGroupInterface
 {
-    private UuidGeneratorInterface $uuidGenerator;
-
-    public function __construct(UuidGeneratorInterface $uuidGenerator)
+    public function __construct(private readonly UuidGeneratorInterface $uuidGenerator)
     {
-        $this->uuidGenerator = $uuidGenerator;
     }
 
     public function load(ObjectManager $manager): void
