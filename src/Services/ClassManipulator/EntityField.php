@@ -55,7 +55,7 @@ class EntityField
 
     public function isOfAddableType(): bool
     {
-        return $this->isOfPrimitiveType();
+        return true;
     }
 
     public function getOptions(): array
