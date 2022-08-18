@@ -4,6 +4,7 @@ namespace Bornfight\MabooMakerBundle\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
 use Doctrine\ORM\Mapping\NamingStrategy;
 use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
@@ -11,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\AbstractClassMetadataFactory;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Persistence\Mapping\MappingException as PersistenceMappingException;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
@@ -23,10 +25,7 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
  */
 class DoctrineHelper
 {
-    /**
-     * @var string
-     */
-    private $entityNamespace;
+    private string $entityNamespace;
 
     /**
      * @var ManagerRegistry
@@ -38,13 +37,20 @@ class DoctrineHelper
      */
     private $annotatedPrefixes;
 
+    private bool $attributeMappingSupport;
+
     /**
      * @var ManagerRegistry
      */
-    public function __construct(string $entityNamespace, $registry = null, array $annotatedPrefixes = null)
-    {
+    public function __construct(
+        string $entityNamespace,
+        $registry = null,
+        bool $attributeMappingSupport = false,
+        array $annotatedPrefixes = null
+    ) {
         $this->entityNamespace = trim($entityNamespace, '\\');
         $this->registry = $registry;
+        $this->attributeMappingSupport = $attributeMappingSupport;
         $this->annotatedPrefixes = $annotatedPrefixes;
     }
 
@@ -107,6 +113,57 @@ class DoctrineHelper
         }
 
         return false;
+    }
+
+    public function doesClassUsesAttributes(string $className): bool
+    {
+        try {
+            /** @var EntityManagerInterface $em */
+            $em = $this->getRegistry()->getManagerForClass($className);
+        } catch (\ReflectionException $exception) {
+            // this exception will be thrown by the registry if the class isn't created yet.
+            // an example case is the "make:entity" command, which needs to know which driver is used for the class to determine
+            // if the class should be generated with attributes or annotations. If this exception is thrown, we will check based on the
+            // namespaces for the given $className and compare it with the doctrine configuration to get the correct MappingDriver.
+
+            return $this->isInstanceOf($this->getMappingDriverForNamespace($className), AttributeDriver::class);
+        }
+
+        if (null === $em) {
+            throw new \InvalidArgumentException(sprintf('Cannot find the entity manager for class "%s"', $className));
+        }
+
+        if (null === $this->annotatedPrefixes) {
+            // doctrine-bundle <= 2.2
+            $metadataDriver = $em->getConfiguration()->getMetadataDriverImpl();
+
+            if (!$this->isInstanceOf($metadataDriver, MappingDriverChain::class)) {
+                return $this->isInstanceOf($metadataDriver, AttributeDriver::class);
+            }
+
+            foreach ($metadataDriver->getDrivers() as $namespace => $driver) {
+                if (0 === strpos($className, $namespace)) {
+                    return $this->isInstanceOf($driver, AttributeDriver::class);
+                }
+            }
+
+            return $this->isInstanceOf($metadataDriver->getDefaultDriver(), AttributeDriver::class);
+        }
+
+        $managerName = array_search($em, $this->getRegistry()->getManagers(), true);
+
+        foreach ($this->annotatedPrefixes[$managerName] as [$prefix, $annotationDriver]) {
+            if (0 === strpos($className, $prefix)) {
+                return $this->isInstanceOf($annotationDriver, AttributeDriver::class);
+            }
+        }
+
+        return false;
+    }
+
+    public function isDoctrineSupportingAttributes(): bool
+    {
+        return $this->isDoctrineInstalled() && true === $this->attributeMappingSupport;
     }
 
     public function getEntitiesForAutocomplete(): array
@@ -252,5 +309,32 @@ class DoctrineHelper
         $connection = $this->getRegistry()->getConnection();
 
         return $connection->getDatabasePlatform()->getReservedKeywordsList()->isKeyword($name);
+    }
+
+    /**
+     * this method tries to find the correct MappingDriver for the given namespace/class
+     * To determine which MappingDriver belongs to the class we check the prefixes configured in Doctrine and use the
+     * prefix that has the closest match to the given $namespace.
+     *
+     * this helper function is needed to create entities with the configuration of doctrine if they are not yet been registered
+     * in the ManagerRegistry
+     */
+    private function getMappingDriverForNamespace(string $namespace): ?MappingDriver
+    {
+        $lowestCharacterDiff = null;
+        $foundDriver = null;
+
+        foreach ($this->annotatedPrefixes ?? [] as $mappings) {
+            foreach ($mappings as [$prefix, $driver]) {
+                $diff = substr_compare($namespace, $prefix, 0);
+
+                if ($diff >= 0 && (null === $lowestCharacterDiff || $diff < $lowestCharacterDiff)) {
+                    $lowestCharacterDiff = $diff;
+                    $foundDriver = $driver;
+                }
+            }
+        }
+
+        return $foundDriver;
     }
 }

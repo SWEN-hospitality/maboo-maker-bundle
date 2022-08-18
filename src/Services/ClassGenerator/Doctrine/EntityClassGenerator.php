@@ -24,13 +24,16 @@ class EntityClassGenerator
     ): string {
         $tableName = $this->doctrineHelper->getPotentialTableName($entityClassDetails->getFullName());
 
+        $supportsAttributes = $this->doctrineHelper->isDoctrineSupportingAttributes();
+
         return $this->generator->generateClass(
             $entityClassDetails->getFullName(),
             __DIR__ . '/../../../Resources/skeleton/doctrine/Entity.tpl.php',
             [
                 'should_escape_table_name' => $this->doctrineHelper->isKeyword($tableName),
                 'table_name' => $tableName,
-                'doctrine_use_attributes' => false, // Not supported yet
+                'doctrine_use_attributes' => $supportsAttributes
+                    && $this->doctrineHelper->doesClassUsesAttributes($entityClassDetails->getFullName()),
             ]
         );
     }

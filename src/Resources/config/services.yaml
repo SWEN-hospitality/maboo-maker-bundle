@@ -46,8 +46,9 @@ services:
   bornfight_maboo_maker.doctrine_helper:
     class: Bornfight\MabooMakerBundle\Doctrine\DoctrineHelper
     arguments:
-      - 'App\Shared\Infrastructure\Persistence\Doctrine\Entity'
-      - '@doctrine'
+      $entityNamespace: 'App\Shared\Infrastructure\Persistence\Doctrine\Entity'
+      $registry: '@doctrine'
+      $attributeMappingSupport: '%bornfight_maboo_maker.compatible_check.doctrine.supports_attributes%'
 
   bornfight_maboo_maker.service.namespace_service:
     class: Bornfight\MabooMakerBundle\Services\NamespaceService

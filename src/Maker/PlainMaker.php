@@ -37,6 +37,7 @@ abstract class PlainMaker extends AbstractMaker
 
         $io->block($messages, 'Success!', 'fg=black;bg=green', ' ', true);
     }
+
     /**
      * @param array|string $feedbackMessages
      */

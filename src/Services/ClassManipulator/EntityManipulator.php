@@ -7,6 +7,7 @@ namespace Bornfight\MabooMakerBundle\Services\ClassManipulator;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping\Column;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -14,10 +15,9 @@ use Symfony\Bundle\MakerBundle\Str;
 
 class EntityManipulator extends ClassManipulator
 {
-    public function __construct(string $sourceCode, bool $useAnnotations, bool $fluentMutators)
+    public function __construct(string $sourceCode, bool $useAnnotations, bool $useAttributes, bool $fluentMutators)
     {
         $overwrite = false;
-        $useAttributes = false;
 
         parent::__construct($sourceCode, $overwrite, $useAnnotations, $fluentMutators, $useAttributes);
     }
@@ -28,10 +28,15 @@ class EntityManipulator extends ClassManipulator
         $typeHintShortName = Str::getShortClassName($typeHint);
         $nullable = $columnOptions['nullable'] ?? false;
         $isId = (bool) ($columnOptions['id'] ?? false);
+        $attributes = [];
 
-        $comments[] = $this->buildAnnotationLine('@ORM\Column', $columnOptions);
+        if (true === $this->useAttributesForDoctrineMapping) {
+            $attributes[] = $this->buildAttributeNode(Column::class, $columnOptions, 'ORM');
+        } else {
+            $comments[] = $this->buildAnnotationLine('@ORM\Column', $columnOptions);
+        }
 
-        $this->addClassFieldAsPromotedProperty($propertyName, $typeHintShortName, $nullable, $comments);
+        $this->addClassFieldAsPromotedProperty($propertyName, $typeHintShortName, $nullable, $comments, $attributes);
         $this->addUseStatementIfNecessary($typeHint);
         $this->addGetter($propertyName, $typeHintShortName, $nullable);
 

@@ -80,7 +80,9 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
             $this->namespaceService->getEntityNamespace()
         );
 
-        $classExists = class_exists($entityClassDetails->getFullName());
+        $classFullName = $entityClassDetails->getFullName();
+
+        $classExists = class_exists($classFullName);
 
         if (false === $classExists) {
             $entityPath = $this->entityClassGenerator->generateEntityClass(
@@ -89,14 +91,16 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
 
             $generator->writeChanges();
         } else {
-            $entityPath = $this->getPathOfClass($entityClassDetails->getFullName());
+            $entityPath = $this->getPathOfClass($classFullName);
         }
 
-        if (!$this->doesEntityUseAnnotationMapping($entityClassDetails->getFullName())) {
+        if (false === $this->doesEntityUseAnnotationMapping($classFullName)
+            && false === $this->doesEntityUseAttributeMapping($classFullName)
+        ) {
             throw new RuntimeCommandException(
                 sprintf(
-                    'Only annotation or attribute mapping is supported by make:entity, but the <info>%s</info> class uses a different format. If you would like this command to generate the properties & getter/setter methods, add your mapping configuration, and then re-run this command with the <info>--regenerate</info> flag.',
-                    $entityClassDetails->getFullName()
+                    'Only annotation or attribute mapping is supported by make:maboo-entity, but the %s class uses a different format. If you would like this command to generate the properties & getter/setter methods, add your mapping configuration, and then re-run this command with the <info>--regenerate</info> flag.',
+                    $classFullName
                 )
             );
         }
@@ -111,12 +115,14 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
             ], $io);
         }
 
-        $currentFields = $this->getPropertyNames($entityClassDetails->getFullName());
+        $currentFields = $this->getPropertyNames($classFullName);
 
-        $useAnnotations = $this->doctrineHelper->isClassAnnotated($entityClassDetails->getFullName());
+        $useAttributes = $this->doctrineHelper->doesClassUsesAttributes($classFullName) && $this->doctrineHelper->isDoctrineSupportingAttributes();
+        $useAnnotations = $this->doctrineHelper->isClassAnnotated($classFullName);
         $entityManipulator = $this->manipulatorManager->createEntityManipulator(
-            $entityClassDetails->getFullName(),
+            $classFullName,
             $useAnnotations,
+            $useAttributes,
             true
         );
 
@@ -175,5 +181,25 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
         }
 
         return $this->doctrineHelper->isClassAnnotated($className);
+    }
+
+    private function doesEntityUseAttributeMapping(string $className): bool
+    {
+        if (PHP_VERSION < 80000) {
+            return false;
+        }
+
+        if (!class_exists($className)) {
+            $otherClassMetadata = $this->doctrineHelper->getMetadata(Str::getNamespace($className) . '\\', true);
+
+            // if we have no metadata, we should assume this is the first class being mapped
+            if (empty($otherClassMetadata)) {
+                return false;
+            }
+
+            $className = reset($otherClassMetadata)->getName();
+        }
+
+        return $this->doctrineHelper->doesClassUsesAttributes($className);
     }
 }

@@ -18,9 +18,15 @@ class ClassManipulatorManager
     public function createEntityManipulator(
         string $fullClassName,
         bool $useAnnotations = false,
+        bool $useAttributes = true,
         bool $fluentMutators = true
     ): EntityManipulator {
-        return new EntityManipulator($this->getFileContent($fullClassName), $useAnnotations, $fluentMutators);
+        return new EntityManipulator(
+            $this->getFileContent($fullClassName),
+            $useAnnotations,
+            $useAttributes,
+            $fluentMutators
+        );
     }
 
     /**
