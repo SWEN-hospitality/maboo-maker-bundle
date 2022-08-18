@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bornfight\MabooMakerBundle\Services\ClassManipulator;
 
+use Bornfight\MabooMakerBundle\Util\PrettyPrinter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PhpParser\Builder;
@@ -27,7 +28,6 @@ use Symfony\Bundle\MakerBundle\Doctrine\RelationOneToMany;
 use Symfony\Bundle\MakerBundle\Doctrine\RelationOneToOne;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameValue;
-use Symfony\Bundle\MakerBundle\Util\PrettyPrinter;
 
 class ClassSourceManipulator
 {
@@ -41,7 +41,7 @@ class ClassSourceManipulator
     protected bool $useAttributesForDoctrineMapping;
     private $parser;
     private $lexer;
-    private $printer;
+    private PrettyPrinter $printer;
 
     private $sourceCode;
     private $oldStmts;
