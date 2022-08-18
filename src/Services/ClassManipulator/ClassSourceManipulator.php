@@ -7,6 +7,11 @@ namespace Bornfight\MabooMakerBundle\Services\ClassManipulator;
 use Bornfight\MabooMakerBundle\Util\PrettyPrinter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use PhpParser\Builder;
 use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\BuilderHelpers;
@@ -545,8 +550,9 @@ class ClassSourceManipulator
         } else {
             $attributes = [
                 $this->buildAttributeNode(
-                    $relation instanceof RelationManyToOne ? 'ORM\\ManyToOne' : 'ORM\\OneToOne',
-                    $annotationOptions
+                    $relation instanceof RelationManyToOne ? ManyToOne::class : OneToOne::class,
+                    $annotationOptions,
+                    'ORM'
                 ),
             ];
         }
@@ -557,13 +563,23 @@ class ClassSourceManipulator
                     'nullable' => false,
                 ]);
             } else {
-                $attributes[] = $this->buildAttributeNode('ORM\\JoinColumn', [
-                    'nullable' => false,
-                ]);
+                $attributes[] = $this->buildAttributeNode(JoinColumn::class, ['nullable' => false], 'ORM');
             }
         }
 
-        $this->addProperty($relation->getPropertyName(), $annotations, null, $attributes);
+        $typeHintShortName = Str::getShortClassName($typeHint);
+
+        $this->addParamToConstructor(
+            $relation->getPropertyName(),
+            $typeHintShortName,
+            null,
+            $relation->isNullable(),
+            true,
+            false,
+            false,
+            $annotations,
+            $attributes
+        );
 
         $this->addGetter(
             $relation->getPropertyName(),

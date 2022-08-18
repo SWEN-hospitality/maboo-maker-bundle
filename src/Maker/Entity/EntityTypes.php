@@ -87,9 +87,14 @@ class EntityTypes
 
         return array_merge(
             array_keys($types),
-            EntityRelation::getValidRelationTypes(),
+            $this->getAllValidRelationTypes(),
             ['relation']
         );
+    }
+
+    public function getAllValidRelationTypes(): array
+    {
+        return EntityRelation::getValidRelationTypes();
     }
 
     public function getFieldData(ConsoleStyle $io, string $fieldName, string $type): array
