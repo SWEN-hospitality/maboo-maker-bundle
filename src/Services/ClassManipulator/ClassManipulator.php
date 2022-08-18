@@ -75,14 +75,15 @@ abstract class ClassManipulator extends ClassSourceManipulator
         string $name,
         $type,
         bool $isNullable,
-        array $comments = []
+        array $comments = [],
+        array $attributes = []
     ): void {
         $defaultValue = null;
         if ('array' === $type) {
             $defaultValue = new Array_([], ['kind' => Array_::KIND_SHORT]);
         }
 
-        $this->addParamToConstructor($name, $type, $defaultValue, $isNullable, true, false, false, $comments);
+        $this->addParamToConstructor($name, $type, $defaultValue, $isNullable, true, false, false, $comments, $attributes);
     }
 
     protected function addPromotedProperty(
@@ -100,7 +101,7 @@ abstract class ClassManipulator extends ClassSourceManipulator
             $defaultValue = new Array_([], ['kind' => Array_::KIND_SHORT]);
         }
 
-        $this->addParamToConstructor($name, $type, $defaultValue, $isNullable, $isPrivate, $isPublic, $isReadonly);
+        $this->addParamToConstructor($name, $type, $defaultValue, $isNullable, $isPrivate, $isPublic, $isReadonly, $comments, $attributes);
     }
 
     /**

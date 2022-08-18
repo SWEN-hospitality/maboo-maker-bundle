@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bornfight\MabooMakerBundle\Services\ClassManipulator;
 
+use Bornfight\MabooMakerBundle\Util\PrettyPrinter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PhpParser\Builder;
@@ -27,7 +28,6 @@ use Symfony\Bundle\MakerBundle\Doctrine\RelationOneToMany;
 use Symfony\Bundle\MakerBundle\Doctrine\RelationOneToOne;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameValue;
-use Symfony\Bundle\MakerBundle\Util\PrettyPrinter;
 
 class ClassSourceManipulator
 {
@@ -38,10 +38,10 @@ class ClassSourceManipulator
     private $overwrite;
     protected bool $useAnnotations;
     private $fluentMutators;
-    private $useAttributesForDoctrineMapping;
+    protected bool $useAttributesForDoctrineMapping;
     private $parser;
     private $lexer;
-    private $printer;
+    private PrettyPrinter $printer;
 
     private $sourceCode;
     private $oldStmts;
@@ -331,7 +331,7 @@ class ClassSourceManipulator
 
     /**
      * @param string|Name|NullableType|Identifier $type
-     * @param mixed|null $defaultValue
+     * @param mixed|null                          $defaultValue
      */
     protected function buildProperty(
         string $name,
@@ -461,7 +461,7 @@ class ClassSourceManipulator
 
     /**
      * @param string $annotationClass The annotation: e.g. "@ORM\Column"
-     * @param array $options Key-value pair of options for the annotation
+     * @param array  $options Key-value pair of options for the annotation
      */
     protected function buildAnnotationLine(string $annotationClass, array $options): string
     {
@@ -829,7 +829,8 @@ class ClassSourceManipulator
         bool $isPrivate = false,
         bool $isPublic = false,
         bool $isReadonly = false,
-        array $comments = []
+        array $comments = [],
+        array $attributes = []
     ) {
         $constructorNode = $this->getConstructorNode(); //->getParams();
 
@@ -844,6 +845,13 @@ class ClassSourceManipulator
             $flags += Class_::MODIFIER_READONLY;
         }
 
+        $attributeGroups = [];
+        if ($this->useAttributesForDoctrineMapping) {
+            foreach ($attributes as $attribute) {
+                $attributeGroups[] = BuilderHelpers::normalizeAttribute($attribute);
+            }
+        }
+
         $paramNode = new Node\Param(
             new Node\Expr\Variable($propertyName),
             $defaultValue,
@@ -851,7 +859,8 @@ class ClassSourceManipulator
             false,
             false,
             [],
-            $flags
+            $flags,
+            $attributeGroups
         );
 
         if ($comments && $this->useAnnotations) {
@@ -962,6 +971,31 @@ class ClassSourceManipulator
         $this->updateSourceCodeFromNewStmts();
 
         return $shortClassName;
+    }
+
+    /**
+     * Builds a PHPParser attribute node.
+     *
+     * @param string  $attributeClass The attribute class which should be used for the attribute E.g. #[Column()]
+     * @param array   $options The named arguments for the attribute ($key = argument name, $value = argument value)
+     * @param ?string $attributePrefix If a prefix is provided, the node is built using the prefix. E.g. #[ORM\Column()]
+     */
+    public function buildAttributeNode(string $attributeClass, array $options, ?string $attributePrefix = null): Node\Attribute
+    {
+        $options = $this->sortOptionsByClassConstructorParameters($options, $attributeClass);
+
+        $context = $this;
+        $nodeArguments = array_map(static function ($option, $value) use ($context) {
+            return new Node\Arg($context->buildNodeExprByValue($value), false, false, [], new Node\Identifier($option));
+        }, array_keys($options), array_values($options));
+
+        $class = $attributePrefix ? sprintf('%s\\%s', $attributePrefix,
+            Str::getShortClassName($attributeClass)) : Str::getShortClassName($attributeClass);
+
+        return new Node\Attribute(
+            new Node\Name($class),
+            $nodeArguments
+        );
     }
 
     private function updateSourceCodeFromNewStmts(): void
@@ -1427,27 +1461,6 @@ class ClassSourceManipulator
         }
 
         return $nodeValue;
-    }
-
-    /**
-     * builds an PHPParser attribute node.
-     *
-     * @param string $attributeClass the attribute class which should be used for the attribute
-     * @param array $options the named arguments for the attribute ($key = argument name, $value = argument value)
-     */
-    private function buildAttributeNode(string $attributeClass, array $options): Node\Attribute
-    {
-        $options = $this->sortOptionsByClassConstructorParameters($options, $attributeClass);
-
-        $context = $this;
-        $nodeArguments = array_map(static function ($option, $value) use ($context) {
-            return new Node\Arg($context->buildNodeExprByValue($value), false, false, [], new Node\Identifier($option));
-        }, array_keys($options), array_values($options));
-
-        return new Node\Attribute(
-            new Node\Name($attributeClass),
-            $nodeArguments
-        );
     }
 
     /**
