@@ -584,9 +584,7 @@ class ClassSourceManipulator
         $this->addGetter(
             $relation->getPropertyName(),
             $relation->getCustomReturnType() ?: $typeHint,
-            // getter methods always have nullable return values
-            // unless this has been customized explicitly
-            $relation->getCustomReturnType() ? $relation->isCustomReturnTypeNullable() : true
+            $relation->isNullable()
         );
 
         if ($relation->shouldAvoidSetter()) {
@@ -596,12 +594,7 @@ class ClassSourceManipulator
         $setterNodeBuilder = $this->createSetterNodeBuilder(
             $relation->getPropertyName(),
             $typeHint,
-            // make the type-hint nullable always for ManyToOne to allow the owning
-            // side to be set to null, which is needed for orphanRemoval
-            // (specifically: when you set the inverse side, the generated
-            // code will *also* set the owning side to null - so it needs to be allowed)
-            // e.g. $userAvatarPhoto->setUser(null);
-            $relation instanceof RelationOneToOne ? $relation->isNullable() : true
+            $relation->isNullable()
         );
 
         // set the *owning* side of the relation
