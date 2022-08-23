@@ -12,6 +12,7 @@ use Bornfight\MabooMakerBundle\Util\ClassProperties;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -111,7 +112,13 @@ class MakeDomainModel extends PlainMaker
             $fileManagerOperations = [];
             $fileManagerOperations[$domainModelPath] = $domainModelManipulator;
 
-            $domainModelManipulator->addField($entityField->name, $entityField->getOptions());
+            if ($entityField->isManyToOneField()) {
+                $fieldName = Str::addSuffix($entityField->name, 'Id');
+                $domainModelManipulator->addForeignKeyField($fieldName, $entityField->getOptions());
+            } else {
+                $domainModelManipulator->addField($entityField->name, $entityField->getOptions());
+            }
+
 
             foreach ($fileManagerOperations as $path => $manipulatorOrMessage) {
                 $this->manipulatorManager->dumpFile($path, $manipulatorOrMessage->getSourceCode());

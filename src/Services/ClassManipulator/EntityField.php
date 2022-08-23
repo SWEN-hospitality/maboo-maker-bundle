@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bornfight\MabooMakerBundle\Services\ClassManipulator;
 
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -16,12 +17,19 @@ class EntityField
     public string $name;
     public string $typeHint;
     public bool $isNullable = false;
+    /** @var AttributeGroup[]  */
+    public array $attrGroups = [];
 
-    public function __construct(string $name, string $typeHint, bool $isNullable = false)
-    {
+    public function __construct(
+        string $name,
+        string $typeHint,
+        bool $isNullable = false,
+        array $attrGroups = []
+    ) {
         $this->name = $name;
         $this->typeHint = $typeHint;
         $this->isNullable = $isNullable;
+        $this->attrGroups = $attrGroups;
     }
 
     public static function fromProperty(Property $property): self
@@ -40,10 +48,10 @@ class EntityField
         $name = $param->var->name;
 
         if (!($param->type instanceof NullableType)) {
-            return new self($name, self::getType($param->type));
+            return new self($name, self::getType($param->type), false, $param->attrGroups);
         }
 
-        return new self($name, self::getType($param->type->type), true);
+        return new self($name, self::getType($param->type->type), true,  $param->attrGroups);
     }
 
     public function isOfPrimitiveType(): bool
@@ -64,6 +72,24 @@ class EntityField
             'typeHint' => $this->typeHint,
             'nullable' => $this->isNullable,
         ];
+    }
+
+    public function isManyToOneField(): bool
+    {
+        foreach ($this->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+
+                $nameParts = $attribute->name->parts;
+                if (sizeof($nameParts) < 2) {
+                    continue;
+                }
+
+                if ($nameParts[0] === 'ORM' && $nameParts[1] === 'ManyToOne') {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static function getType($type)

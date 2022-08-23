@@ -34,6 +34,16 @@ class DomainModelManipulator extends ClassManipulator
         $this->addGetter($propertyName,$typeHintShortName, $nullable);
     }
 
+    public function addForeignKeyField(string $propertyName, array $columnOptions, array $comments = [])
+    {
+        $typeHint = 'string';
+        $nullable = $columnOptions['nullable'] ?? false;
+
+        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments);
+
+        $this->addGetter($propertyName, $typeHint, $nullable);
+    }
+
     /**
      * @param string|Name|NullableType|Identifier $type
      */
