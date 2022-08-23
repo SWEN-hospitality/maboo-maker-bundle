@@ -35,7 +35,18 @@ class EntityMapperClassGenerator
                 'entity_alias' => 'Doctrine' . $entityClassDetails->getShortName(),
                 'domain_model' => $domainModelClassDetails->getShortName(),
                 'fields_count' => count($fields),
-                'fields' => array_map(fn (EntityField $field) => ucfirst($field->name), $fields),
+                'fields' => array_map(
+                    function (EntityField $field) {
+                        if ($field->isManyToOneField() === true) {
+                            if ($field->isNullable === true) {
+                                return ucfirst($field->name) . '()?->getId';
+                            }
+                            return ucfirst($field->name) . '()->getId';
+                        }
+                        return ucfirst($field->name);
+                    },
+                    $fields
+                ),
             ]
         );
     }

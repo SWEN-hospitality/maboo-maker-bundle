@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace <?= $namespace ?>;
 
-use <?= $domain_model_full_class_name ?>;
 use <?= $entity_full_class_name ?> as <?= $entity_alias ?>;
 
 /**
