@@ -75,9 +75,26 @@ class <?= $class_name ?> implements <?= $repository_interface_short_name . "\n"?
 
     public function add(<?= $create_write_model_alias ?> $<?= $object_name ?>): <?= $domain_model_short_name . "\n" ?>
     {
+<?php foreach($foreignKeys as $key => $props): ?>
+<?php if ($props['nullable'] === true): ?>
+        $<?= $props['name'] ?> = null;
+        if (null !== $<?= $object_name ?>-><?= $props['domainFieldName'] ?>) {
+            $<?= $props['name'] ?> = $this->entityManager->getReference(<?= $props['entityAlias'] ?>::class, $<?= $object_name ?>-><?= $props['domainFieldName'] ?>);
+            assert($<?= $props['name'] ?> instanceof <?= $props['entityAlias'] ?>);
+        }
+<?php else: ?>
+        $<?= $props['name'] ?> = $this->entityManager->getReference(<?= $props['entityAlias'] ?>::class, $<?= $object_name ?>-><?= $props['domainFieldName'] ?>);
+        assert($<?= $props['name'] ?> instanceof <?= $props['entityAlias'] ?>);
+<?php endif; ?>
+<?= "\n" ?>
+<?php endforeach; ?>
         $entity = new <?= $entity_alias ?>(
 <?php foreach ($fields as $idx => $field): ?>
-            $<?= $object_name ?>-><?= $field ?><?= $idx < $fields_count - 1 ? ",\n" : "\n" ?>
+<?php if (true === in_array($field, array_keys($foreignKeys))): ?>
+            $<?= $foreignKeys[$field]['name'] ?><?= ",\n" ?>
+<?php else: ?>
+            $<?= $object_name ?>-><?= $field ?><?= ",\n" ?>
+<?php endif ?>
 <?php endforeach; ?>
         );
 
@@ -89,11 +106,29 @@ class <?= $class_name ?> implements <?= $repository_interface_short_name . "\n"?
 
     public function update(<?= $update_write_model_alias ?> $<?= $object_name ?>): <?= $domain_model_short_name . "\n" ?>
     {
+<?php foreach($foreignKeys as $key => $props): ?>
+<?php if ($props['nullable'] === true): ?>
+        $<?= $props['name'] ?> = null;
+        if (null !== $<?= $object_name ?>-><?= $props['domainFieldName'] ?>) {
+            $<?= $props['name'] ?> = $this->entityManager->getReference(<?= $props['entityAlias'] ?>::class, $<?= $object_name ?>-><?= $props['domainFieldName'] ?>);
+            assert($<?= $props['name'] ?> instanceof <?= $props['entityAlias'] ?>);
+        }
+<?php else: ?>
+        $<?= $props['name'] ?> = $this->entityManager->getReference(<?= $props['entityAlias'] ?>::class, $<?= $object_name ?>-><?= $props['domainFieldName'] ?>);
+        assert($<?= $props['name'] ?> instanceof <?= $props['entityAlias'] ?>);
+<?php endif; ?>
+<?= "\n" ?>
+<?php endforeach; ?>
         $entity = $this->entityManager->find(<?= $entity_alias ?>::class, $<?= $object_name ?>->id);
         assert($entity instanceof <?= $entity_alias ?>);
 
 <?php foreach ($fields as $idx => $field): ?>
-<?php if ('id' !== $field): ?>
+<?php if ('id' === $field): ?>
+<?php continue; ?>
+<?php endif ?>
+<?php if (true === in_array($field, array_keys($foreignKeys))): ?>
+        $entity-><?= $field_setters[$idx] ?>($<?= $foreignKeys[$field]['name'] ?>);
+<?php else: ?>
         $entity-><?= $field_setters[$idx] ?>($<?= $object_name ?>-><?= $field ?>);
 <?php endif ?>
 <?php endforeach; ?>

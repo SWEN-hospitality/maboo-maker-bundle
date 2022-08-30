@@ -50,7 +50,31 @@ class RepositoryClassGenerator
                 'entity_mapper_short_name' => $entityMapperClassDetails->getShortName(),
                 'db_table_alias' => $this->getEntityNameInitials($entityClassDetails->getShortName()),
                 'fields_count' => count($fields),
-                'fields' => array_map(fn (EntityField $field) => $field->name, $fields),
+                'fields' => array_map(
+                    fn (EntityField $field) => $field->getDomainFieldName(),
+                    $fields
+                ),
+                'foreignKeys' => array_combine(
+                    array_map(
+                        fn (EntityField $field) => $field->getDomainFieldName(),
+                        array_filter(
+                            $fields,
+                            fn (EntityField $field) => $field->isManyToOneField()
+                        )
+                    ),
+                    array_map(
+                        fn (EntityField $field) => [
+                            'nullable' => $field->isNullable,
+                            'name' => $field->name,
+                            'entityAlias' => 'Doctrine' . $field->typeHint,
+                            'domainFieldName' => $field->getDomainFieldName(),
+                        ],
+                        array_filter(
+                            $fields,
+                            fn (EntityField $field) => $field->isManyToOneField()
+                        )
+                    )
+                ),
                 'field_setters' => array_map(fn (EntityField $field) => 'set' . Str::asCamelCase($field->name), $fields)
             ]
         );

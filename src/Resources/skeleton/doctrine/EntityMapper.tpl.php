@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace <?= $namespace ?>;
 
-use <?= $domain_model_full_class_name ?>;
 use <?= $entity_full_class_name ?> as <?= $entity_alias ?>;
 
 /**
@@ -16,7 +15,7 @@ class <?= $class_name."\n" ?>
     {
         return new <?= $domain_model ?>(
 <?php foreach ($fields as $idx => $field): ?>
-            $entity->get<?= $field ?>()<?= $idx < $fields_count - 1 ? ",\n" : "\n" ?>
+            $entity->get<?= $field ?>()<?= ",\n" ?>
 <?php endforeach; ?>
         );
     }

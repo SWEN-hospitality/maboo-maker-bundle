@@ -55,6 +55,11 @@ class ClassManipulatorManager
         return new WriteModelManipulator($this->getFileContent($fullClassName), false);
     }
 
+    public function createGenericClassManipulator(string $fullClassName): GenericClassManipulator
+    {
+        return new GenericClassManipulator($this->getFileContent($fullClassName));
+    }
+
     public function dumpFile(string $filename, string $content): void
     {
         $this->fileManager->dumpFile($filename, $content);

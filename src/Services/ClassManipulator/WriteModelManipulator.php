@@ -25,6 +25,14 @@ class WriteModelManipulator extends ClassManipulator
         $this->addUseStatementIfNecessary($typeHint);
     }
 
+    public function addForeignKeyField(string $propertyName, array $columnOptions, array $comments = []): void
+    {
+        $typeHint = 'string';
+        $nullable = $columnOptions['nullable'] ?? false;
+
+        $this->addPromotedProperty($propertyName, $typeHint, $nullable, $comments, [], false, true);
+    }
+
     /**
      * @param string|Name|NullableType|Identifier $type
      */

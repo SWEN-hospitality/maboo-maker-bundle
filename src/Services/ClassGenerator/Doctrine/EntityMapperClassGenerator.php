@@ -35,7 +35,10 @@ class EntityMapperClassGenerator
                 'entity_alias' => 'Doctrine' . $entityClassDetails->getShortName(),
                 'domain_model' => $domainModelClassDetails->getShortName(),
                 'fields_count' => count($fields),
-                'fields' => array_map(fn (EntityField $field) => ucfirst($field->name), $fields),
+                'fields' => array_map(
+                    fn (EntityField $field) => $field->getNameInfixCapitalized(),
+                    $fields
+                ),
             ]
         );
     }

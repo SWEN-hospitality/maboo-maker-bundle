@@ -13,6 +13,7 @@ use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -135,12 +136,26 @@ class MakeWriteModels extends PlainMaker
 
             if ($shouldAddToCreateWriteModel) {
                 $fileManagerOperations[$createWriteModelPath] = $createWriteModelManipulator;
-                $createWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+                if ($entityField->isManyToOneField()) {
+                    $createWriteModelManipulator->addForeignKeyField(
+                        $entityField->foreignKeyName(),
+                        $entityField->getOptions()
+                    );
+                } else {
+                    $createWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+                }
             }
 
             if ($shouldAddToUpdateWriteModel) {
                 $fileManagerOperations[$updateWriteModelPath] = $updateWriteModelManipulator;
-                $updateWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+                if ($entityField->isManyToOneField()) {
+                    $updateWriteModelManipulator->addForeignKeyField(
+                        $entityField->foreignKeyName(),
+                        $entityField->getOptions()
+                    );
+                } else {
+                    $updateWriteModelManipulator->addField($entityField->name, $entityField->getOptions());
+                }
             }
 
             foreach ($fileManagerOperations as $path => $manipulator) {
