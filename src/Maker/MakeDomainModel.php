@@ -113,8 +113,7 @@ class MakeDomainModel extends PlainMaker
             $fileManagerOperations[$domainModelPath] = $domainModelManipulator;
 
             if ($entityField->isManyToOneField()) {
-                $fieldName = Str::addSuffix($entityField->name, 'Id');
-                $domainModelManipulator->addForeignKeyField($fieldName, $entityField->getOptions());
+                $domainModelManipulator->addForeignKeyField($entityField->foreignKeyName(), $entityField->getOptions());
             } else {
                 $domainModelManipulator->addField($entityField->name, $entityField->getOptions());
             }

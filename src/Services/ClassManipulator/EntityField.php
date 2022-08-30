@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use Symfony\Bundle\MakerBundle\Str;
 
 class EntityField
 {
@@ -90,6 +91,11 @@ class EntityField
             }
         }
         return false;
+    }
+
+    public function foreignKeyName(): string
+    {
+        return Str::addSuffix($this->name, 'Id');
     }
 
     private static function getType($type)
