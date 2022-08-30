@@ -98,6 +98,33 @@ class EntityField
         return Str::addSuffix($this->name, 'Id');
     }
 
+    public function getNameInfix(): string
+    {
+        if ($this->isManyToOneField() === false) {
+            return $this->name;
+        }
+
+        if ($this->isNullable === true) {
+            return $this->name . '()?->getId';
+        }
+
+        return $this->name . '()->getId';
+    }
+
+    public function getNameInfixCapitalized(): string
+    {
+        return ucfirst($this->getNameInfix());
+    }
+
+    public function getDomainFieldName(): string
+    {
+        if ($this->isManyToOneField() === false) {
+            return $this->name;
+        }
+
+        return $this->foreignKeyName();
+    }
+
     private static function getType($type)
     {
         if ($type instanceof FullyQualified) {

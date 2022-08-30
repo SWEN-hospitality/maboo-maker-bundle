@@ -36,15 +36,7 @@ class EntityMapperClassGenerator
                 'domain_model' => $domainModelClassDetails->getShortName(),
                 'fields_count' => count($fields),
                 'fields' => array_map(
-                    function (EntityField $field) {
-                        if ($field->isManyToOneField() === true) {
-                            if ($field->isNullable === true) {
-                                return ucfirst($field->name) . '()?->getId';
-                            }
-                            return ucfirst($field->name) . '()->getId';
-                        }
-                        return ucfirst($field->name);
-                    },
+                    fn (EntityField $field) => $field->getNameInfixCapitalized(),
                     $fields
                 ),
             ]

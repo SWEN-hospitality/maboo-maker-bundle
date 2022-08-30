@@ -15,7 +15,7 @@ class <?= $class_name."\n" ?>
     {
         return new <?= $domain_model ?>(
 <?php foreach ($fields as $idx => $field): ?>
-            $entity->get<?= $field ?>()<?= $idx < $fields_count - 1 ? ",\n" : "\n" ?>
+            $entity->get<?= $field ?>()<?= ",\n" ?>
 <?php endforeach; ?>
         );
     }
