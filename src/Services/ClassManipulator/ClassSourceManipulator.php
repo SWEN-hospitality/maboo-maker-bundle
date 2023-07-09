@@ -41,9 +41,7 @@ class ClassSourceManipulator
     private const CONTEXT_CLASS_METHOD = 'class_method';
 
     private $overwrite;
-    protected bool $useAnnotations;
     private $fluentMutators;
-    protected bool $useAttributesForDoctrineMapping;
     private $parser;
     private $lexer;
     private PrettyPrinter $printer;
@@ -55,12 +53,10 @@ class ClassSourceManipulator
 
     private $pendingComments = [];
 
-    public function __construct(string $sourceCode, bool $overwrite = false, bool $useAnnotations = true, bool $fluentMutators = true, bool $useAttributesForDoctrineMapping = false)
+    public function __construct(string $sourceCode, bool $overwrite = false, protected bool $useAnnotations = true, bool $fluentMutators = true, protected bool $useAttributesForDoctrineMapping = false)
     {
         $this->overwrite = $overwrite;
-        $this->useAnnotations = $useAnnotations;
         $this->fluentMutators = $fluentMutators;
-        $this->useAttributesForDoctrineMapping = $useAttributesForDoctrineMapping;
         $this->lexer = new Lexer\Emulative([
             'usedAttributes' => [
                 'comments',
@@ -210,7 +206,13 @@ class ClassSourceManipulator
 
     public function addGetter(string $propertyName, $returnType, bool $isReturnTypeNullable, array $commentLines = []): void
     {
-        $methodName = 'get' . Str::asCamelCase($propertyName);
+        $methodName = Str::asCamelCase($propertyName);
+        if (!(
+            str_starts_with(Str::asSnakeCase($propertyName), 'is_')
+            || str_starts_with(Str::asSnakeCase($propertyName), 'has_')
+        )) {
+            $methodName = 'get' . Str::asCamelCase($propertyName);
+        }
 
         $this->addCustomGetter($propertyName, $methodName, $returnType, $isReturnTypeNullable, $commentLines);
     }
@@ -992,7 +994,11 @@ class ClassSourceManipulator
     public function buildAttributeNode(string $attributeClass, array $options, ?string $attributePrefix = null): Node\Attribute
     {
         $options = $this->sortOptionsByClassConstructorParameters($options, $attributeClass);
-
+        if (true === isset($options['type'])) {
+            if (true === in_array($options['type'], ['string', 'bool', 'int', 'boolean', 'integer'])) {
+                unset($options['type']);
+            }
+        }
         $context = $this;
         $nodeArguments = array_map(static function ($option, $value) use ($context) {
             return new Node\Arg($context->buildNodeExprByValue($value), false, false, [], new Node\Identifier($option));

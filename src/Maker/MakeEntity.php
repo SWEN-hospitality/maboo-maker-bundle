@@ -29,30 +29,16 @@ class MakeEntity extends PlainMaker implements InputAwareMakerInterface
 {
     use ClassProperties;
 
-    private Questionnaire $questionnaire;
-    private DoctrineHelper $doctrineHelper;
-    private EntityClassGenerator $entityClassGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-    private EntityTypes $entityTypes;
-
     public function __construct(
         Interactor $interactor,
-        Questionnaire $questionnaire,
-        DoctrineHelper $doctrineHelper,
-        EntityClassGenerator $entityClassGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager,
-        EntityTypes $entityTypes
+        private Questionnaire $questionnaire,
+        private DoctrineHelper $doctrineHelper,
+        private EntityClassGenerator $entityClassGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager,
+        private EntityTypes $entityTypes
     ) {
         parent::__construct($interactor);
-
-        $this->questionnaire = $questionnaire;
-        $this->doctrineHelper = $doctrineHelper;
-        $this->entityClassGenerator = $entityClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
-        $this->entityTypes = $entityTypes;
     }
 
     public static function getCommandName(): string
