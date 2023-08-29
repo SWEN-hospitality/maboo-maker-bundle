@@ -226,21 +226,13 @@ class ClassSourceManipulator
                 new Node\Expr\Variable($propertyName)
             ))
         );
-        $this->makeMethodFluent($builder);
+        $builder->setReturnType('void');
         $this->addMethod($builder->getNode());
     }
 
     public function addEntitySetter(string $propertyName, $type, bool $isNullable, array $commentLines = []): void
     {
-        $builder = $this->createSetterNodeBuilder($propertyName, $type, $isNullable, $commentLines);
-        $builder->addStmt(
-            new Node\Stmt\Expression(new Node\Expr\Assign(
-                new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $propertyName),
-                new Node\Expr\Variable($propertyName)
-            ))
-        );
-        $builder->setReturnType('void');
-        $this->addMethod($builder->getNode());
+        $this->addSetter($propertyName, $type, $isNullable, $commentLines);
     }
 
     /**
