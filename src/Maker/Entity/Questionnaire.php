@@ -38,10 +38,7 @@ class Questionnaire
         return $question;
     }
 
-    /**
-     * @return string[]|EntityRelation|null
-     */
-    public function getNextField(ConsoleStyle $io, array $existingFields, string $entity)
+    public function getNextField(ConsoleStyle $io, array $existingFields, string $entity): array|EntityRelation|null
     {
         $fieldName = $this->getFieldName($io, $existingFields, $entity);
 

@@ -66,7 +66,7 @@ class EntityTypes
             return 'integer';
         }
 
-        if (0 === strpos($snakeCasedField, 'is_') || 0 === strpos($snakeCasedField, 'has_')) {
+        if (str_starts_with($snakeCasedField, 'is_') || str_starts_with($snakeCasedField, 'has_')) {
             return 'boolean';
         }
 
@@ -108,6 +108,9 @@ class EntityTypes
                 '255',
                 [Validator::class, 'validateLength']
             );
+            if (255 === $data['length']) {
+                unset($data['length']);
+            }
         } elseif ('decimal' === $type || 'ap_decimal' === $type) {
             // 10 is the default value given in \Doctrine\DBAL\Schema\Column::$_precision
             $data['precision'] = (int) $io->ask(

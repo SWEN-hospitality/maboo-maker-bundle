@@ -10,13 +10,10 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 class EntityClassGenerator
 {
-    private Generator $generator;
-    private DoctrineHelper $doctrineHelper;
-
-    public function __construct(Generator $generator, DoctrineHelper $doctrineHelper)
-    {
-        $this->generator = $generator;
-        $this->doctrineHelper = $doctrineHelper;
+    public function __construct(
+        private Generator $generator,
+        private DoctrineHelper $doctrineHelper,
+    ) {
     }
 
     public function generateEntityClass(
