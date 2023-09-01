@@ -604,7 +604,6 @@ class ClassSourceManipulator
                 new Node\Expr\Variable($relation->getPropertyName())
             ))
         );
-        $this->makeMethodFluent($setterNodeBuilder);
         $this->addMethod($setterNodeBuilder->getNode());
     }
 
