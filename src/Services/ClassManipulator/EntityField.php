@@ -15,22 +15,13 @@ use Symfony\Bundle\MakerBundle\Str;
 
 class EntityField
 {
-    public string $name;
-    public string $typeHint;
-    public bool $isNullable = false;
-    /** @var AttributeGroup[]  */
-    public array $attrGroups = [];
-
+    /** @param AttributeGroup[] $attrGroups */
     public function __construct(
-        string $name,
-        string $typeHint,
-        bool $isNullable = false,
-        array $attrGroups = []
+        public string $name,
+        public string $typeHint,
+        public bool $isNullable = false,
+        public array $attrGroups = []
     ) {
-        $this->name = $name;
-        $this->typeHint = $typeHint;
-        $this->isNullable = $isNullable;
-        $this->attrGroups = $attrGroups;
     }
 
     public static function fromProperty(Property $property): self

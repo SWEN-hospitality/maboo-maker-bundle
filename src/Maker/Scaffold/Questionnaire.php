@@ -10,7 +10,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class Questionnaire
 {
-    public function getComponentsSelection(ConsoleStyle $io, MakerSelection $makerSelection)
+    public function getComponentsSelection(ConsoleStyle $io, MakerSelection $makerSelection): mixed
     {
         $questionText =
             'What else, apart from the entity class, you want this tool to generate for you?' . PHP_EOL .

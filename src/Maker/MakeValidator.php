@@ -19,27 +19,15 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeValidator extends PlainMaker
 {
-    private ValidatorClassGenerator $validatorClassGenerator;
-    private SpecificationInterfaceGenerator $specificationInterfaceGenerator;
-    private SpecificationClassGenerator $specificationClassGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-
     public function __construct(
         Interactor $interactor,
-        ValidatorClassGenerator $validatorClassGenerator,
-        SpecificationInterfaceGenerator $specificationInterfaceGenerator,
-        SpecificationClassGenerator $specificationClassGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager
+        private ValidatorClassGenerator $validatorClassGenerator,
+        private SpecificationInterfaceGenerator $specificationInterfaceGenerator,
+        private SpecificationClassGenerator $specificationClassGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager
     ) {
         parent::__construct($interactor);
-
-        $this->validatorClassGenerator = $validatorClassGenerator;
-        $this->specificationInterfaceGenerator = $specificationInterfaceGenerator;
-        $this->specificationClassGenerator = $specificationClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
     }
 
     public static function getCommandName(): string
@@ -52,7 +40,7 @@ class MakeValidator extends PlainMaker
         return 'Creates or updates a validator and specification';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -64,12 +52,12 @@ class MakeValidator extends PlainMaker
             ->addValidatorArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectValidatorArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $model = $input->getArgument($this->interactor->getDomainModelArg());

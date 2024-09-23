@@ -37,42 +37,19 @@ class Interactor
     public const MUTATION_ARG = 'mutation';
     public const FIXTURES_ARG = 'fixtures';
 
-    private ModuleQuestionnaire $moduleQuestionnaire;
-    private EntityQuestionnaire $entityQuestionnaire;
-    private DomainModelQuestionnaire $domainModelQuestionnaire;
-    private WriteModelsQuestionnaire $writeModelsQuestionnaire;
-    private EntityMapperQuestionnaire $entityMapperQuestionnaire;
-    private RepositoryQuestionnaire $repositoryQuestionnaire;
-    private ValidatorQuestionnaire $validatorQuestionnaire;
-    private ManagerQuestionnaire $managerQuestionnaire;
-    private ResolverQuestionnaire $resolverQuestionnaire;
-    private MutationQuestionnaire $mutationQuestionnaire;
-    private FixturesQuestionnaire $fixturesQuestionnaire;
-
     public function __construct(
-        ModuleQuestionnaire $moduleQuestionnaire,
-        EntityQuestionnaire $entityQuestionnaire,
-        DomainModelQuestionnaire $domainModelQuestionnaire,
-        WriteModelsQuestionnaire $writeModelsQuestionnaire,
-        EntityMapperQuestionnaire $entityMapperQuestionnaire,
-        RepositoryQuestionnaire $repositoryQuestionnaire,
-        ValidatorQuestionnaire $validatorQuestionnaire,
-        ManagerQuestionnaire $managerQuestionnaire,
-        ResolverQuestionnaire $resolverQuestionnaire,
-        MutationQuestionnaire $mutationQuestionnaire,
-        FixturesQuestionnaire $fixturesQuestionnaire
+        private ModuleQuestionnaire $moduleQuestionnaire,
+        private EntityQuestionnaire $entityQuestionnaire,
+        private DomainModelQuestionnaire $domainModelQuestionnaire,
+        private WriteModelsQuestionnaire $writeModelsQuestionnaire,
+        private EntityMapperQuestionnaire $entityMapperQuestionnaire,
+        private RepositoryQuestionnaire $repositoryQuestionnaire,
+        private ValidatorQuestionnaire $validatorQuestionnaire,
+        private ManagerQuestionnaire $managerQuestionnaire,
+        private ResolverQuestionnaire $resolverQuestionnaire,
+        private MutationQuestionnaire $mutationQuestionnaire,
+        private FixturesQuestionnaire $fixturesQuestionnaire
     ) {
-        $this->moduleQuestionnaire = $moduleQuestionnaire;
-        $this->entityQuestionnaire = $entityQuestionnaire;
-        $this->domainModelQuestionnaire = $domainModelQuestionnaire;
-        $this->writeModelsQuestionnaire = $writeModelsQuestionnaire;
-        $this->entityMapperQuestionnaire = $entityMapperQuestionnaire;
-        $this->repositoryQuestionnaire = $repositoryQuestionnaire;
-        $this->validatorQuestionnaire = $validatorQuestionnaire;
-        $this->managerQuestionnaire = $managerQuestionnaire;
-        $this->resolverQuestionnaire = $resolverQuestionnaire;
-        $this->mutationQuestionnaire = $mutationQuestionnaire;
-        $this->fixturesQuestionnaire = $fixturesQuestionnaire;
     }
 
     public function collectModuleArguments(InputInterface $input, ConsoleStyle $io, Command $command): void

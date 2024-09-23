@@ -15,21 +15,15 @@ use Symfony\Component\Console\Input\InputInterface;
 
 abstract class PlainMaker extends AbstractMaker
 {
-    protected Interactor $interactor;
-
-    public function __construct(Interactor $interactor)
+    public function __construct(protected Interactor $interactor)
     {
-        $this->interactor = $interactor;
     }
 
     public function configureDependencies(DependencyBuilder $dependencies, InputInterface $input = null)
     {
     }
 
-    /**
-     * @param array|string $feedbackMessages
-     */
-    protected function echoSuccessMessages($feedbackMessages, ConsoleStyle $io)
+    protected function echoSuccessMessages(array|string $feedbackMessages, ConsoleStyle $io): void
     {
         $messages = (true === is_array($feedbackMessages))
             ? array_values($feedbackMessages)
@@ -38,10 +32,7 @@ abstract class PlainMaker extends AbstractMaker
         $io->block($messages, 'Success!', 'fg=black;bg=green', ' ', true);
     }
 
-    /**
-     * @param array|string $feedbackMessages
-     */
-    protected function echoInfoMessages($feedbackMessages, ConsoleStyle $io)
+    protected function echoInfoMessages(array|string $feedbackMessages, ConsoleStyle $io): void
     {
         $messages = (true === is_array($feedbackMessages))
             ? array_values($feedbackMessages)

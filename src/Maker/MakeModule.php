@@ -14,18 +14,12 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class MakeModule extends PlainMaker
 {
-    private Filesystem $filesystem;
-    private string $sourceDirectory;
-
     public function __construct(
         Interactor $interactor,
-        Filesystem $filesystem,
-        string $sourceDirectory
+        private Filesystem $filesystem,
+        private string $sourceDirectory
     ) {
         parent::__construct($interactor);
-
-        $this->filesystem = $filesystem;
-        $this->sourceDirectory = $sourceDirectory;
     }
 
     public static function getCommandName(): string
@@ -38,18 +32,18 @@ class MakeModule extends PlainMaker
         return 'Creates bounded context (module) folder (if it does not exist yet)';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectModuleArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $modulePath = $this->sourceDirectory . $module;

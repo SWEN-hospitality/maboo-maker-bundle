@@ -17,21 +17,13 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeResolver extends PlainMaker
 {
-    private ResolverClassGenerator $resolverClassGenerator;
-    private NamespaceService $namespaceService;
-    private EntityNamingService $entityNaming;
-
     public function __construct(
         Interactor $interactor,
-        ResolverClassGenerator $resolverClassGenerator,
-        NamespaceService $namespaceService,
-        EntityNamingService $entityNaming
+        private ResolverClassGenerator $resolverClassGenerator,
+        private NamespaceService $namespaceService,
+        private EntityNamingService $entityNaming
     ) {
         parent::__construct($interactor);
-
-        $this->resolverClassGenerator = $resolverClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->entityNaming = $entityNaming;
     }
 
     public static function getCommandName(): string
@@ -44,7 +36,7 @@ class MakeResolver extends PlainMaker
         return 'Creates or updates a resolver';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -54,12 +46,12 @@ class MakeResolver extends PlainMaker
             ->addResolverArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectResolverArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $model = $input->getArgument($this->interactor->getDomainModelArg());

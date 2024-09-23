@@ -12,11 +12,8 @@ use Symfony\Component\Console\Question\Question;
 
 class Questionnaire
 {
-    private NamespaceService $namespaceService;
-
-    public function __construct(NamespaceService $namespaceService)
+    public function __construct(private NamespaceService $namespaceService)
     {
-        $this->namespaceService = $namespaceService;
     }
 
     public function getModule(ConsoleStyle $io, string $questionText): string

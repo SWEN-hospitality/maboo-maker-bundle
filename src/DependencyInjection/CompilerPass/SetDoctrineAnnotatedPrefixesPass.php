@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class SetDoctrineAnnotatedPrefixesPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $annotatedPrefixes = null;
 

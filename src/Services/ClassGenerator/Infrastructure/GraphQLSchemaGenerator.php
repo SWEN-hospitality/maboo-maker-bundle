@@ -8,11 +8,8 @@ use Symfony\Bundle\MakerBundle\Generator;
 
 class GraphQLSchemaGenerator
 {
-    private Generator $generator;
-
-    public function __construct(Generator $generator)
+    public function __construct(private Generator $generator)
     {
-        $this->generator = $generator;
     }
 
     public function generateModelTypeFile(

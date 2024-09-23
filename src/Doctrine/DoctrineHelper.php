@@ -27,15 +27,9 @@ class DoctrineHelper
 {
     private string $entityNamespace;
 
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
+    private ManagerRegistry $registry;
 
-    /**
-     * @var array|null
-     */
-    private $annotatedPrefixes;
+    private ?array $annotatedPrefixes;
 
     private bool $attributeMappingSupport;
 
@@ -57,7 +51,7 @@ class DoctrineHelper
     /**
      * @return ManagerRegistry
      */
-    public function getRegistry()
+    public function getRegistry(): ?ManagerRegistry
     {
         // this should never happen: we will have checked for the
         // DoctrineBundle dependency before calling this

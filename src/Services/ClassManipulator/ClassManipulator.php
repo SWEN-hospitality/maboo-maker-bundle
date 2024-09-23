@@ -104,15 +104,12 @@ abstract class ClassManipulator extends ClassSourceManipulator
         $this->addParamToConstructor($name, $type, $defaultValue, $isNullable, $isPrivate, $isPublic, $isReadonly, $comments, $attributes);
     }
 
-    /**
-     * @param string|Name|NullableType|Identifier $type
-     */
     protected abstract function addClassProperty(
         string $name,
         array $annotationLines = [],
         $defaultValue = null,
         array $attributes = [],
-        $type = 'string',
+        string|Name|NullableType|Identifier $type = 'string',
         bool $nullable = false
     );
 }

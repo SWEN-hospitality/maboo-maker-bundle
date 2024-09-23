@@ -8,11 +8,8 @@ use Symfony\Bundle\MakerBundle\FileManager;
 
 class ClassManipulatorManager
 {
-    private FileManager $fileManager;
-
-    public function __construct(FileManager $fileManager)
+    public function __construct(private FileManager $fileManager)
     {
-        $this->fileManager = $fileManager;
     }
 
     public function createEntityManipulator(

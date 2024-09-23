@@ -16,18 +16,12 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeMutation extends PlainMaker
 {
-    private MutationClassGenerator $mutationClassGenerator;
-    private NamespaceService $namespaceService;
-
     public function __construct(
         Interactor $interactor,
-        MutationClassGenerator $mutationClassGenerator,
-        NamespaceService $namespaceService
+        private MutationClassGenerator $mutationClassGenerator,
+        private NamespaceService $namespaceService
     ) {
         parent::__construct($interactor);
-
-        $this->mutationClassGenerator = $mutationClassGenerator;
-        $this->namespaceService = $namespaceService;
     }
 
     public static function getCommandName(): string
@@ -40,7 +34,7 @@ class MakeMutation extends PlainMaker
         return 'Creates or updates a mutation class';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -50,12 +44,12 @@ class MakeMutation extends PlainMaker
             ->addMutationArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectMutationArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $model = $input->getArgument($this->interactor->getDomainModelArg());
