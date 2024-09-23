@@ -10,11 +10,8 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 class MutationClassGenerator
 {
-    private Generator $generator;
-
-    public function __construct(Generator $generator)
+    public function __construct(private Generator $generator)
     {
-        $this->generator = $generator;
     }
 
     public function generateMutationClass(

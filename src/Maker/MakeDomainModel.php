@@ -12,7 +12,6 @@ use Bornfight\MabooMakerBundle\Util\ClassProperties;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
-use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -20,21 +19,13 @@ class MakeDomainModel extends PlainMaker
 {
     use ClassProperties;
 
-    private DomainModelClassGenerator $domainModelClassGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-
     public function __construct(
         Interactor $interactor,
-        DomainModelClassGenerator $domainModelClassGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager
+        private DomainModelClassGenerator $domainModelClassGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager
     ) {
         parent::__construct($interactor);
-
-        $this->domainModelClassGenerator = $domainModelClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
     }
 
     public static function getCommandName(): string
@@ -47,7 +38,7 @@ class MakeDomainModel extends PlainMaker
         return 'Creates or updates a domain model class';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -55,12 +46,12 @@ class MakeDomainModel extends PlainMaker
             ->addDomainModelArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectDomainModelArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $entity = $input->getArgument($this->interactor->getEntityArg());

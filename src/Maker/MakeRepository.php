@@ -21,24 +21,14 @@ class MakeRepository extends PlainMaker
 {
     use ClassProperties;
 
-    private RepositoryInterfaceGenerator $repositoryInterfaceGenerator;
-    private RepositoryClassGenerator $repositoryClassGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-
     public function __construct(
         Interactor $interactor,
-        RepositoryInterfaceGenerator $repositoryInterfaceGenerator,
-        RepositoryClassGenerator $repositoryClassGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager
+        private RepositoryInterfaceGenerator $repositoryInterfaceGenerator,
+        private RepositoryClassGenerator $repositoryClassGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager
     ) {
         parent::__construct($interactor);
-
-        $this->repositoryInterfaceGenerator = $repositoryInterfaceGenerator;
-        $this->repositoryClassGenerator = $repositoryClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
     }
 
     public static function getCommandName(): string
@@ -51,7 +41,7 @@ class MakeRepository extends PlainMaker
         return 'Creates or updates a repository interface and concrete implementation';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -64,12 +54,12 @@ class MakeRepository extends PlainMaker
             ->addRepositoryClassArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectRepositoryArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $entity = $input->getArgument($this->interactor->getEntityArg());

@@ -44,15 +44,12 @@ class DomainModelManipulator extends ClassManipulator
         $this->addGetter($propertyName, $typeHint, $nullable);
     }
 
-    /**
-     * @param string|Name|NullableType|Identifier $type
-     */
     public function addClassProperty(
         string $name,
         array $annotationLines = [],
         $defaultValue = null,
         array $attributes = [],
-        $type = 'string',
+        string|Name|NullableType|Identifier $type = 'string',
         bool $nullable = false
     ): void {
         if ($this->propertyExists($name)) {

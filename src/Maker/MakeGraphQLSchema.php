@@ -20,24 +20,14 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeGraphQLSchema extends PlainMaker
 {
-    private GraphQLSchemaGenerator $graphQLSchemaGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-    private EntityNamingService $entityNaming;
-
     public function __construct(
         Interactor $interactor,
-        GraphQLSchemaGenerator $graphQLSchemaGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager,
-        EntityNamingService $entityNaming
+        private GraphQLSchemaGenerator $graphQLSchemaGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager,
+        private EntityNamingService $entityNaming
     ) {
         parent::__construct($interactor);
-
-        $this->graphQLSchemaGenerator = $graphQLSchemaGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
-        $this->entityNaming = $entityNaming;
     }
 
     public static function getCommandName(): string
@@ -50,7 +40,7 @@ class MakeGraphQLSchema extends PlainMaker
         return 'Creates or updates GraphQL types and schema';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -58,12 +48,12 @@ class MakeGraphQLSchema extends PlainMaker
             ->addDomainModelArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectGraphQLSchemaArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $model = $input->getArgument($this->interactor->getDomainModelArg());
@@ -281,7 +271,7 @@ class MakeGraphQLSchema extends PlainMaker
         $this->graphQLSchemaGenerator->generateDeleteMutationPayloadTypeFile($targetPath, $payloadTypeName);
     }
 
-    private function registerQueries(Generator $generator, string $domainModel)
+    private function registerQueries(Generator $generator, string $domainModel): void
     {
         $typesPath = $this->namespaceService->getGraphQLQueryTypesPath();
 
@@ -323,7 +313,7 @@ class MakeGraphQLSchema extends PlainMaker
         }
     }
 
-    private function registerMutations(Generator $generator, string $domainModel)
+    private function registerMutations(Generator $generator, string $domainModel): void
     {
         $typesPath = $this->namespaceService->getGraphQLMutationTypesPath();
 
@@ -402,22 +392,13 @@ class MakeGraphQLSchema extends PlainMaker
             return 'ID!';
         }
 
-        switch ($field->typeHint) {
-            case 'string':
-                $type = 'String';
-                break;
-            case 'int':
-                $type = 'Int';
-                break;
-            case 'bool':
-                $type = 'Boolean';
-                break;
-            case 'float':
-                $type = 'Float';
-                break;
-            default:
-                $type = 'string';
-        }
+        $type = match ($field->typeHint) {
+            'string' => 'String',
+            'int' => 'Int',
+            'bool' => 'Boolean',
+            'float' => 'Float',
+            default => 'string',
+        };
 
         if (false === $field->isNullable) {
             $type .= '!';

@@ -17,21 +17,13 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeFixtures extends PlainMaker
 {
-    private FixturesClassGenerator $fixturesClassGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-
     public function __construct(
         Interactor $interactor,
-        FixturesClassGenerator $fixturesClassGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager
+        private FixturesClassGenerator $fixturesClassGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager
     ) {
         parent::__construct($interactor);
-
-        $this->fixturesClassGenerator = $fixturesClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
     }
 
     public static function getCommandName(): string
@@ -44,7 +36,7 @@ class MakeFixtures extends PlainMaker
         return 'Creates or updates a fixture class';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -53,12 +45,12 @@ class MakeFixtures extends PlainMaker
             ->addFixturesArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectFixturesArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $entity = $input->getArgument($this->interactor->getEntityArg());

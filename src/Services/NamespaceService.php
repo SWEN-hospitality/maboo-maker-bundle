@@ -10,72 +10,29 @@ use Symfony\Component\Finder\Finder;
 
 class NamespaceService
 {
-    private DoctrineHelper $doctrineHelper;
-    private string $entityNamespace;
-    private string $domainModelNamespaceTemplate;
-    private string $writeModelsNamespaceTemplate;
-    private string $entityMapperNamespaceTemplate;
-    private string $repositoryInterfaceNamespaceTemplate;
-    private string $repositoryClassNamespaceTemplate;
-    private string $validatorNamespaceTemplate;
-    private string $specificationInterfaceNamespaceTemplate;
-    private string $specificationClassNamespaceTemplate;
-    private string $managerNamespaceTemplate;
-    private string $resolverNamespaceTemplate;
-    private string $mutationNamespaceTemplate;
-    private string $fixturesNamespaceTemplate;
-    private string $gqlQueryTypesPath;
-    private string $gqlMutationTypesPath;
-    private string $gqlModelTypePathTemplate;
-    private string $gqlMutationInputTypesPathTemplate;
-    private string $gqlMutationPayloadTypesPathTemplate;
-    private FileManager $fileManager;
-    private string $projectSourceDirectory;
-
     public function __construct(
-        DoctrineHelper $doctrineHelper,
-        string $entityNamespace,
-        string $domainModelNamespaceTemplate,
-        string $writeModelsNamespaceTemplate,
-        string $entityMapperNamespaceTemplate,
-        string $repositoryInterfaceNamespaceTemplate,
-        string $repositoryClassNamespaceTemplate,
-        string $validatorNamespaceTemplate,
-        string $specificationInterfaceNamespaceTemplate,
-        string $specificationClassNamespaceTemplate,
-        string $managerNamespaceTemplate,
-        string $resolverNamespaceTemplate,
-        string $mutationNamespaceTemplate,
-        string $fixturesNamespaceTemplate,
-        string $gqlQueryTypesPath,
-        string $gqlMutationTypesPath,
-        string $gqlModelTypePathTemplate,
-        string $gqlMutationInputTypesPathTemplate,
-        string $gqlMutationPayloadTypesPathTemplate,
-        FileManager $fileManager,
-        string $projectSourceDirectory
+        private DoctrineHelper $doctrineHelper,
+        private string $entityNamespace,
+        private string $domainModelNamespaceTemplate,
+        private string $writeModelsNamespaceTemplate,
+        private string $entityMapperNamespaceTemplate,
+        private string $repositoryInterfaceNamespaceTemplate,
+        private string $repositoryClassNamespaceTemplate,
+        private string $validatorNamespaceTemplate,
+        private string $specificationInterfaceNamespaceTemplate,
+        private string $specificationClassNamespaceTemplate,
+        private string $managerNamespaceTemplate,
+        private string $resolverNamespaceTemplate,
+        private string $mutationNamespaceTemplate,
+        private string $fixturesNamespaceTemplate,
+        private string $gqlQueryTypesPath,
+        private string $gqlMutationTypesPath,
+        private string $gqlModelTypePathTemplate,
+        private string $gqlMutationInputTypesPathTemplate,
+        private string $gqlMutationPayloadTypesPathTemplate,
+        private FileManager $fileManager,
+        private string $projectSourceDirectory
     ) {
-        $this->doctrineHelper = $doctrineHelper;
-        $this->entityNamespace = $entityNamespace;
-        $this->domainModelNamespaceTemplate = $domainModelNamespaceTemplate;
-        $this->writeModelsNamespaceTemplate = $writeModelsNamespaceTemplate;
-        $this->entityMapperNamespaceTemplate = $entityMapperNamespaceTemplate;
-        $this->repositoryInterfaceNamespaceTemplate = $repositoryInterfaceNamespaceTemplate;
-        $this->repositoryClassNamespaceTemplate = $repositoryClassNamespaceTemplate;
-        $this->validatorNamespaceTemplate = $validatorNamespaceTemplate;
-        $this->specificationInterfaceNamespaceTemplate = $specificationInterfaceNamespaceTemplate;
-        $this->specificationClassNamespaceTemplate = $specificationClassNamespaceTemplate;
-        $this->managerNamespaceTemplate = $managerNamespaceTemplate;
-        $this->resolverNamespaceTemplate = $resolverNamespaceTemplate;
-        $this->mutationNamespaceTemplate = $mutationNamespaceTemplate;
-        $this->fixturesNamespaceTemplate = $fixturesNamespaceTemplate;
-        $this->gqlQueryTypesPath = $gqlQueryTypesPath;
-        $this->gqlMutationTypesPath = $gqlMutationTypesPath;
-        $this->gqlModelTypePathTemplate = $gqlModelTypePathTemplate;
-        $this->gqlMutationInputTypesPathTemplate = $gqlMutationInputTypesPathTemplate;
-        $this->gqlMutationPayloadTypesPathTemplate = $gqlMutationPayloadTypesPathTemplate;
-        $this->fileManager = $fileManager;
-        $this->projectSourceDirectory = $projectSourceDirectory;
     }
 
     public function getEntityNamespace(): string

@@ -17,21 +17,13 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class MakeEntityMapper extends PlainMaker
 {
-    private EntityMapperClassGenerator $entityMapperClassGenerator;
-    private NamespaceService $namespaceService;
-    private ClassManipulatorManager $manipulatorManager;
-
     public function __construct(
         Interactor $interactor,
-        EntityMapperClassGenerator $entityMapperClassGenerator,
-        NamespaceService $namespaceService,
-        ClassManipulatorManager $manipulatorManager
+        private EntityMapperClassGenerator $entityMapperClassGenerator,
+        private NamespaceService $namespaceService,
+        private ClassManipulatorManager $manipulatorManager
     ) {
         parent::__construct($interactor);
-
-        $this->entityMapperClassGenerator = $entityMapperClassGenerator;
-        $this->namespaceService = $namespaceService;
-        $this->manipulatorManager = $manipulatorManager;
     }
 
     public static function getCommandName(): string
@@ -44,7 +36,7 @@ class MakeEntityMapper extends PlainMaker
         return 'Creates or updates mapper for a model class';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -53,12 +45,12 @@ class MakeEntityMapper extends PlainMaker
             ->addEntityMapperArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $this->interactor->collectEntityMapperArguments($input, $io, $command);
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $module = $input->getArgument($this->interactor->getModuleArg());
         $entity = $input->getArgument($this->interactor->getEntityArg());

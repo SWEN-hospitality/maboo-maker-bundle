@@ -19,17 +19,14 @@ use Symfony\Component\Console\Input\InputInterface;
 class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
 {
     private Application $application;
-    private Questionnaire $questionnaire;
 
     private MakerSelection $makerSelection;
 
     public function __construct(
-        Questionnaire $questionnaire,
+        private Questionnaire $questionnaire,
         Interactor $interactor
     ) {
         parent::__construct($interactor);
-
-        $this->questionnaire = $questionnaire;
 
         $this->makerSelection = new MakerSelection();
     }
@@ -44,7 +41,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         return 'Generates (or updates) files in the layered architecture following project conventions';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $this->buildCommand($command)
             ->addModuleArgumentToCommand($command, $inputConfig)
@@ -64,7 +61,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
             ->addFixturesArgumentToCommand($command, $inputConfig);
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $io->warning([
             'At this point, you should commit any unsaved changes.',
@@ -113,7 +110,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         }
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         // Select (create if necessary) domain (module, bounded context)
         $makeModuleCommand = $this->application->find('make:maboo-module');
@@ -194,7 +191,7 @@ class MakeScaffold extends PlainMaker implements ApplicationAwareMakerInterface
         ], $io);
     }
 
-    public function setApplication(Application $application)
+    public function setApplication(Application $application): void
     {
         $this->application = $application;
     }

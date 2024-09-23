@@ -20,15 +20,12 @@ class GenericClassManipulator extends ClassManipulator
         parent::__construct($sourceCode, $overwrite, $useAnnotations, $fluentMutators, $useAttributes);
     }
 
-    /**
-     * @param string|Name|NullableType|Identifier $type
-     */
     public function addClassProperty(
         string $name,
         array $annotationLines = [],
         $defaultValue = null,
         array $attributes = [],
-        $type = 'string',
+        string|Name|NullableType|Identifier $type = 'string',
         bool $nullable = false
     ): void {
         if ($this->propertyExists($name)) {
